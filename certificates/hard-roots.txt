@@ -1,0 +1,18 @@
+board_size 5
+exact_root_count 2
+
+candidate 251
+black a1,e5
+white -
+to_play white
+result win
+winning_batch b1
+minimal_completions 203
+
+candidate 255
+black c3
+white -
+to_play white
+result win
+winning_batch a1
+minimal_completions 200

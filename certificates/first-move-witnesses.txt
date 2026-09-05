@@ -1,0 +1,1520 @@
+board_size 5
+exact_white_win_count 253
+
+candidate 1
+black a1 b1 c1 d1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 b5 c5 d5 e5
+white_reply d2 c3 b4 a5
+to_play black
+result loss
+
+candidate 2
+black a1 b1 c1 d1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 b5 c5 d5 e5
+white_reply b2 d2 c3 b4 d4 a5
+to_play black
+result loss
+
+candidate 3
+black b1 c1 d1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 b5 c5 d5
+white_reply a1 d2 c3 b4 a5 e5
+to_play black
+result loss
+
+candidate 4
+black a1 b1 c1 e1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 a5 c5 d5 e5
+white_reply d1 e2 c3 a4 b4 b5
+to_play black
+result loss
+
+candidate 5
+black a1 b1 c1 d1 a2 b2 e2 a3 c3 e3 a4 d4 e4 b5 c5 d5 e5
+white_reply c2 d2 b3 d3 b4 c4 a5
+to_play black
+result loss
+
+candidate 6
+black a1 b1 c1 d1 a2 b2 e2 a3 e3 a4 d4 e4 b5 c5 d5 e5
+white_reply c2 d2 b3 c3 d3 b4 c4 a5
+to_play black
+result loss
+
+candidate 7
+black b1 c1 d1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 b5 c5 d5
+white_reply a1 b2 d2 c3 b4 d4 a5 e5
+to_play black
+result loss
+
+candidate 8
+black a1 b1 c1 e1 a2 c2 a3 b3 d3 e3 c4 e4 a5 c5 d5 e5
+white_reply d1 b2 e2 c3 a4 b4 d4 b5
+to_play black
+result loss
+
+candidate 9
+black a1 b1 c1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 c5 d5 e5
+white_reply d1 e1 e2 c3 a4 b4 a5 b5
+to_play black
+result loss
+
+candidate 10
+black a1 b1 d1 a2 b2 c2 e2 b3 d3 a4 c4 d4 e4 b5 d5 e5
+white_reply c1 d2 a3 c3 e3 b4 a5 c5
+to_play black
+result loss
+
+candidate 11
+black a1 c1 d1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 b5 c5 e5
+white_reply b1 a2 d2 c3 b4 e4 a5 d5
+to_play black
+result loss
+
+candidate 12
+black b1 c1 e1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 a5 c5 d5
+white_reply a1 d1 e2 c3 a4 b4 b5 e5
+to_play black
+result loss
+
+candidate 13
+black a1 b1 c1 e1 a2 b2 d2 a3 e3 b4 d4 e4 a5 c5 d5 e5
+white_reply d1 c2 b3 c3 d3 a4 c4 b5
+to_play black
+result loss
+
+candidate 14
+black a1 b1 d1 e1 a2 b2 d2 e2 a4 b4 d4 e4 a5 b5 d5 e5
+white_reply c1 c2 b3 c3 d3 e3 c4 c5
+to_play black
+result loss
+
+candidate 15
+black a1 b1 c1 d1 a2 e2 a3 c3 e3 a4 e4 b5 c5 d5 e5
+white_reply b2 c2 d2 b3 d3 b4 c4 d4 a5
+to_play black
+result loss
+
+candidate 16
+black b1 c1 d1 a2 b2 e2 a3 c3 e3 a4 d4 e4 b5 c5 d5
+white_reply a1 c2 d2 b3 d3 b4 c4 a5 e5
+to_play black
+result loss
+
+candidate 17
+black a1 b1 c1 e1 a2 b2 a3 c3 e3 d4 e4 a5 c5 d5 e5
+white_reply d1 c2 d2 b3 d3 a4 b4 c4 b5
+to_play black
+result loss
+
+candidate 18
+black a1 b1 d1 e1 a2 b2 e2 c3 a4 d4 e4 a5 b5 d5 e5
+white_reply c1 c2 d2 b3 d3 e3 b4 c4 c5
+to_play black
+result loss
+
+candidate 19
+black a1 b1 c1 a2 b2 d2 a3 c3 e3 b4 d4 e4 c5 d5 e5
+white_reply c2 b3 a4 c4 a5 b5
+to_play black
+result loss
+
+candidate 20
+black a1 b1 c1 d1 a2 e2 a3 e3 a4 e4 b5 c5 d5 e5
+white_reply b2 c2 d2 b3 c3 d3 b4 c4 d4 a5
+to_play black
+result loss
+
+candidate 21
+black b1 c1 d1 a2 b2 e2 a3 e3 a4 d4 e4 b5 c5 d5
+white_reply a1 c2 d2 b3 c3 d3 b4 c4 a5 e5
+to_play black
+result loss
+
+candidate 22
+black a1 b1 c1 e1 a2 b2 a3 e3 d4 e4 a5 c5 d5 e5
+white_reply d1 c2 d2 b3 c3 d3 a4 b4 c4 b5
+to_play black
+result loss
+
+candidate 23
+black a1 b1 d1 e1 a2 b2 e2 a4 d4 e4 a5 b5 d5 e5
+white_reply c1 c2 d2 b3 c3 d3 e3 b4 c4 c5
+to_play black
+result loss
+
+candidate 24
+black a1 b1 c1 a2 c2 a3 b3 d3 e3 c4 e4 c5 d5 e5
+white_reply d1 e1 b2 e2 c3 a4 b4 d4 a5 b5
+to_play black
+result loss
+
+candidate 25
+black a1 b1 d1 a2 c2 e2 b3 d3 a4 c4 e4 b5 d5 e5
+white_reply c1 b2 d2 a3 c3 e3 b4 d4 a5 c5
+to_play black
+result loss
+
+candidate 26
+black a1 c1 d1 c2 e2 a3 b3 d3 e3 a4 c4 b5 c5 e5
+white_reply b1 a2 b2 d2 c3 b4 d4 e4 a5 d5
+to_play black
+result loss
+
+candidate 27
+black b1 c1 e1 a2 c2 a3 b3 d3 e3 c4 e4 a5 c5 d5
+white_reply a1 d1 b2 e2 c3 a4 b4 d4 b5 e5
+to_play black
+result loss
+
+candidate 28
+black b1 c1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 c5 d5
+white_reply a1 d1 e1 e2 c3 a4 b4 a5 b5 e5
+to_play black
+result loss
+
+candidate 29
+black b1 d1 a2 b2 c2 e2 b3 d3 a4 c4 d4 e4 b5 d5
+white_reply a1 c1 d2 a3 c3 e3 b4 a5 c5 e5
+to_play black
+result loss
+
+candidate 30
+black c1 d1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 b5 c5
+white_reply a1 b1 a2 d2 c3 b4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 31
+black a1 b1 e1 a2 b2 c2 b3 d3 c4 d4 e4 a5 d5 e5
+white_reply c1 d1 e2 a3 c3 e3 a4 b4 b5 c5
+to_play black
+result loss
+
+candidate 32
+black a1 c1 e1 b2 c2 a3 b3 d3 e3 c4 d4 a5 c5 e5
+white_reply b1 d1 a2 e2 c3 a4 b4 e4 b5 d5
+to_play black
+result loss
+
+candidate 33
+black a1 b1 c1 e1 a2 d2 a3 e3 b4 e4 a5 c5 d5 e5
+white_reply d1 b2 c2 b3 c3 d3 a4 c4 d4 b5
+to_play black
+result loss
+
+candidate 34
+black a1 b1 d1 e1 a2 d2 e2 a4 b4 e4 a5 b5 d5 e5
+white_reply c1 b2 c2 b3 c3 d3 e3 c4 d4 c5
+to_play black
+result loss
+
+candidate 35
+black a1 c1 d1 e1 d2 e2 a3 e3 a4 b4 a5 b5 c5 e5
+white_reply b1 b2 c2 b3 c3 d3 c4 d4 e4 d5
+to_play black
+result loss
+
+candidate 36
+black a1 b1 c1 a2 b2 d2 a3 e3 b4 d4 e4 c5 d5 e5
+white_reply c2 b3 c3 a4 c4 a5 b5
+to_play black
+result loss
+
+candidate 37
+black a1 b1 d1 a2 b2 d2 e2 a4 b4 d4 e4 b5 d5 e5
+white_reply c1 e1 c2 b3 c3 d3 e3 c4 a5 c5
+to_play black
+result loss
+
+candidate 38
+black b1 c1 e1 a2 b2 d2 a3 e3 b4 d4 e4 a5 c5 d5
+white_reply a1 d1 c2 b3 c3 d3 a4 c4 b5 e5
+to_play black
+result loss
+
+candidate 39
+black b1 d1 e1 a2 b2 d2 e2 a4 b4 d4 e4 a5 b5 d5
+white_reply a1 c1 c2 b3 c3 d3 e3 c4 c5 e5
+to_play black
+result loss
+
+candidate 40
+black b1 c1 d1 a2 e2 a3 c3 e3 a4 e4 b5 c5 d5
+white_reply a1 b2 c2 d2 b3 d3 b4 c4 d4 a5 e5
+to_play black
+result loss
+
+candidate 41
+black a1 b1 c1 e1 a2 a3 c3 e3 e4 a5 c5 d5 e5
+white_reply d1 b2 c2 d2 b3 d3 a4 b4 c4 d4 b5
+to_play black
+result loss
+
+candidate 42
+black a1 b1 d1 e1 a2 e2 c3 a4 e4 a5 b5 d5 e5
+white_reply c1 b2 c2 d2 b3 d3 e3 b4 c4 d4 c5
+to_play black
+result loss
+
+candidate 43
+black a1 c1 d1 e1 e2 a3 c3 e3 a4 a5 b5 c5 e5
+white_reply b1 b2 c2 d2 b3 d3 b4 c4 d4 e4 d5
+to_play black
+result loss
+
+candidate 44
+black a1 b1 c1 a2 b2 a3 c3 e3 d4 e4 c5 d5 e5
+white_reply d1 d2 b3 a4 b4 c4 a5 b5
+to_play black
+result loss
+
+candidate 45
+black a1 b1 d1 a2 b2 e2 c3 a4 d4 e4 b5 d5 e5
+white_reply c1 d2 a3 b3 e3 c4 a5 c5
+to_play black
+result loss
+
+candidate 46
+black a1 c1 d1 b2 e2 a3 c3 e3 a4 d4 b5 c5 e5
+white_reply b1 a2 c2 d2 b3 d3 b4 c4 e4 a5 d5
+to_play black
+result loss
+
+candidate 47
+black b1 c1 e1 a2 b2 a3 c3 e3 d4 e4 a5 c5 d5
+white_reply a1 d1 c2 d2 b3 d3 a4 b4 c4 b5 e5
+to_play black
+result loss
+
+candidate 48
+black b1 d1 e1 a2 b2 e2 c3 a4 d4 e4 a5 b5 d5
+white_reply a1 c1 c2 d2 b3 d3 e3 b4 c4 c5 e5
+to_play black
+result loss
+
+candidate 49
+black a1 b1 e1 a2 c2 b3 c3 d3 c4 e4 a5 d5 e5
+white_reply b2 d2 e2 a3 b4 d4 b5 c5
+to_play black
+result loss
+
+candidate 50
+black a1 b1 c1 a2 d2 a3 c3 e3 b4 e4 c5 d5 e5
+white_reply b2 c2 b3 a4 c4 d4 a5 b5
+to_play black
+result loss
+
+candidate 51
+black b1 c1 a2 b2 d2 a3 c3 e3 b4 d4 e4 c5 d5
+white_reply a1 c2 b3 a4 c4 a5 b5 e5
+to_play black
+result loss
+
+candidate 52
+black a1 b1 a2 c2 d2 b3 c3 d3 b4 c4 e4 d5 e5
+white_reply e1 b2 e2 a3 a4 a5 b5 c5
+to_play black
+result loss
+
+candidate 53
+black b1 c1 d1 a2 e2 a3 e3 a4 e4 b5 c5 d5
+white_reply a1 b2 c2 d2 b3 c3 d3 b4 c4 d4 a5 e5
+to_play black
+result loss
+
+candidate 54
+black a1 b1 c1 e1 a2 a3 e3 e4 a5 c5 d5 e5
+white_reply d1 b2 c2 d2 b3 c3 d3 a4 b4 c4 d4 b5
+to_play black
+result loss
+
+candidate 55
+black a1 b1 d1 e1 a2 e2 a4 e4 a5 b5 d5 e5
+white_reply c1 b2 c2 d2 b3 c3 d3 e3 b4 c4 d4 c5
+to_play black
+result loss
+
+candidate 56
+black a1 c1 d1 e1 e2 a3 e3 a4 a5 b5 c5 e5
+white_reply b1 b2 c2 d2 b3 c3 d3 b4 c4 d4 e4 d5
+to_play black
+result loss
+
+candidate 57
+black a1 b1 c1 a2 b2 a3 e3 d4 e4 c5 d5 e5
+white_reply d1 c2 d2 b3 c3 d3 b4 c4 b5
+to_play black
+result loss
+
+candidate 58
+black a1 b1 d1 a2 b2 e2 a4 d4 e4 b5 d5 e5
+white_reply c1 c2 a3 b3 c3 b4 c4 a5 c5
+to_play black
+result loss
+
+candidate 59
+black a1 c1 d1 b2 e2 a3 e3 a4 d4 b5 c5 e5
+white_reply b1 a2 c2 d2 b3 c3 d3 b4 c4 e4 a5 d5
+to_play black
+result loss
+
+candidate 60
+black b1 c1 e1 a2 b2 a3 e3 d4 e4 a5 c5 d5
+white_reply a1 d1 c2 d2 b3 c3 d3 a4 b4 c4 b5 e5
+to_play black
+result loss
+
+candidate 61
+black b1 d1 e1 a2 b2 e2 a4 d4 e4 a5 b5 d5
+white_reply a1 c1 c2 d2 b3 c3 d3 e3 b4 c4 c5 e5
+to_play black
+result loss
+
+candidate 62
+black b1 c1 a2 c2 a3 b3 d3 e3 c4 e4 c5 d5
+white_reply a1 d1 e1 b2 e2 c3 a4 b4 d4 a5 b5 e5
+to_play black
+result loss
+
+candidate 63
+black b1 d1 a2 c2 e2 b3 d3 a4 c4 e4 b5 d5
+white_reply a1 c1 b2 d2 a3 c3 e3 b4 d4 a5 c5 e5
+to_play black
+result loss
+
+candidate 64
+black c1 d1 c2 e2 a3 b3 d3 e3 a4 c4 b5 c5
+white_reply a1 b1 a2 b2 d2 c3 b4 d4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 65
+black a1 b1 e1 a2 c2 b3 d3 c4 e4 a5 d5 e5
+white_reply b2 d2 e2 a3 c3 e3 d4 b5 c5
+to_play black
+result loss
+
+candidate 66
+black a1 c1 e1 c2 a3 b3 d3 e3 c4 a5 c5 e5
+white_reply b1 d1 a2 b2 e2 c3 a4 b4 d4 e4 b5 d5
+to_play black
+result loss
+
+candidate 67
+black a1 b1 a2 b2 c2 b3 d3 c4 d4 e4 d5 e5
+white_reply c1 d1 e1 e2 a3 c3 e3 a4 b4 a5 b5 c5
+to_play black
+result loss
+
+candidate 68
+black a1 c1 b2 c2 a3 b3 d3 e3 c4 d4 c5 e5
+white_reply b1 d1 e1 a2 e2 c3 a4 b4 e4 a5 b5 d5
+to_play black
+result loss
+
+candidate 69
+black a1 d1 b2 c2 e2 b3 d3 a4 c4 d4 b5 e5
+white_reply b1 c1 a2 d2 a3 c3 e3 b4 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 70
+black b1 e1 a2 b2 c2 b3 d3 c4 d4 e4 a5 d5
+white_reply a1 c1 d1 e2 a3 c3 e3 a4 b4 b5 c5 e5
+to_play black
+result loss
+
+candidate 71
+black c1 e1 b2 c2 a3 b3 d3 e3 c4 d4 a5 c5
+white_reply a1 b1 d1 a2 e2 c3 a4 b4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 72
+black a1 b1 c1 a2 d2 a3 e3 b4 e4 c5 d5 e5
+white_reply b2 c2 b3 c3 a4 c4 d4 a5 b5
+to_play black
+result loss
+
+candidate 73
+black a1 b1 d1 a2 d2 e2 a4 b4 e4 b5 d5 e5
+white_reply c1 e1 b2 c2 b3 c3 d3 e3 c4 d4 a5 c5
+to_play black
+result loss
+
+candidate 74
+black a1 c1 d1 d2 e2 a3 e3 a4 b4 b5 c5 e5
+white_reply b1 e1 b2 c2 b3 c3 d3 c4 d4 e4 a5 d5
+to_play black
+result loss
+
+candidate 75
+black b1 c1 e1 a2 d2 a3 e3 b4 e4 a5 c5 d5
+white_reply a1 d1 b2 c2 b3 c3 d3 a4 c4 d4 b5 e5
+to_play black
+result loss
+
+candidate 76
+black b1 d1 e1 a2 d2 e2 a4 b4 e4 a5 b5 d5
+white_reply a1 c1 b2 c2 b3 c3 d3 e3 c4 d4 c5 e5
+to_play black
+result loss
+
+candidate 77
+black c1 d1 e1 d2 e2 a3 e3 a4 b4 a5 b5 c5
+white_reply a1 b1 a2 c2 b3 c3 d3 c4 d4 e4 d5 e5
+to_play black
+result loss
+
+candidate 78
+black b1 c1 a2 b2 d2 a3 e3 b4 d4 e4 c5 d5
+white_reply a1 c2 b3 c3 a4 c4 a5 b5 e5
+to_play black
+result loss
+
+candidate 79
+black b1 d1 a2 b2 d2 e2 a4 b4 d4 e4 b5 d5
+white_reply a1 c1 e1 c2 b3 c3 d3 e3 c4 a5 c5 e5
+to_play black
+result loss
+
+candidate 80
+black a1 b1 e1 a2 b2 d2 b4 d4 e4 a5 d5 e5
+white_reply c1 d1 c2 e2 a3 c3 d3 e3 a4 c4 b5 c5
+to_play black
+result loss
+
+candidate 81
+black a1 c1 e1 b2 d2 a3 e3 b4 d4 a5 c5 e5
+white_reply b1 d1 a2 c2 b3 c3 d3 a4 c4 e4 b5 d5
+to_play black
+result loss
+
+candidate 82
+black a1 d1 e1 b2 d2 e2 a4 b4 d4 a5 b5 e5
+white_reply b1 c1 a2 c2 a3 b3 d3 e3 c4 e4 c5 d5
+to_play black
+result loss
+
+candidate 83
+black a1 b1 a2 c2 d2 b3 d3 b4 c4 e4 d5 e5
+white_reply e1 b2 e2 a3 c3 a4 a5 b5 c5
+to_play black
+result loss
+
+candidate 84
+black a1 b1 c1 a2 a3 c3 e3 e4 c5 d5 e5
+white_reply d1 b2 d2 b3 a4 b4 c4 d4 a5 b5
+to_play black
+result loss
+
+candidate 85
+black a1 b1 d1 a2 e2 c3 a4 e4 b5 d5 e5
+white_reply c1 b2 d2 a3 b3 d3 c4 d4 a5 c5
+to_play black
+result loss
+
+candidate 86
+black a1 c1 d1 e2 a3 c3 e3 a4 b5 c5 e5
+white_reply b1 b2 c2 d2 b3 d3 c4 e4 a5 d5
+to_play black
+result loss
+
+candidate 87
+black b1 c1 e1 a2 a3 c3 e3 e4 a5 c5 d5
+white_reply a1 d1 b2 c2 d2 b3 d3 a4 b4 c4 d4 b5 e5
+to_play black
+result loss
+
+candidate 88
+black b1 d1 e1 a2 e2 c3 a4 e4 a5 b5 d5
+white_reply a1 c1 b2 c2 d2 b3 d3 e3 b4 c4 d4 c5 e5
+to_play black
+result loss
+
+candidate 89
+black c1 d1 e1 e2 a3 c3 e3 a4 a5 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 d3 b4 c4 d4 e4 d5 e5
+to_play black
+result loss
+
+candidate 90
+black b1 c1 a2 b2 a3 c3 e3 d4 e4 c5 d5
+white_reply a1 d1 d2 b3 a4 b4 c4 a5 b5 e5
+to_play black
+result loss
+
+candidate 91
+black b1 d1 a2 b2 e2 c3 a4 d4 e4 b5 d5
+white_reply a1 c1 d2 a3 b3 e3 c4 a5 c5 e5
+to_play black
+result loss
+
+candidate 92
+black c1 d1 b2 e2 a3 c3 e3 a4 d4 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 d3 b4 c4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 93
+black a1 b1 e1 a2 b2 c3 d4 e4 a5 d5 e5
+white_reply c1 d1 e2 a3 b3 e3 a4 c4 b5 c5
+to_play black
+result loss
+
+candidate 94
+black a1 c1 e1 b2 a3 c3 e3 d4 a5 c5 e5
+white_reply b1 d1 a2 c2 d2 b3 d3 a4 b4 c4 e4 b5 d5
+to_play black
+result loss
+
+candidate 95
+black a1 d1 e1 b2 e2 c3 a4 d4 a5 b5 e5
+white_reply a2 c2 d2 d3 e3 b4 c4 e4 c5 d5
+to_play black
+result loss
+
+candidate 96
+black a1 b1 a2 c2 b3 c3 d3 c4 e4 d5 e5
+white_reply e1 b2 d2 e2 a3 a4 b4 a5 b5 c5
+to_play black
+result loss
+
+candidate 97
+black b1 e1 a2 c2 b3 c3 d3 c4 e4 a5 d5
+white_reply a1 b2 d2 e2 a3 b4 d4 b5 c5 e5
+to_play black
+result loss
+
+candidate 98
+black a1 e1 b2 c2 b3 c3 d3 c4 d4 a5 e5
+white_reply d1 a2 d2 e2 a3 e3 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 99
+black b1 c1 a2 d2 a3 c3 e3 b4 e4 c5 d5
+white_reply a1 b2 c2 b3 a4 c4 d4 a5 b5 e5
+to_play black
+result loss
+
+candidate 100
+black a1 b1 a2 b2 d2 c3 b4 d4 e4 d5 e5
+white_reply c1 c2 e2 a3 b3 e3 a4 a5 b5 c5
+to_play black
+result loss
+
+candidate 101
+black a1 c1 b2 d2 a3 c3 e3 b4 d4 c5 e5
+white_reply b1 a2 c2 b3 a4 c4 e4 a5 b5 d5
+to_play black
+result loss
+
+candidate 102
+black b1 a2 c2 d2 b3 c3 d3 b4 c4 e4 d5
+white_reply a1 e1 b2 e2 a3 a4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 103
+black a1 b2 c2 d2 b3 c3 d3 b4 c4 d4 e5
+white_reply d1 e1 a2 e2 a3 e3 a4 b5 c5 d5
+to_play black
+result loss
+
+candidate 104
+black a1 b1 c1 a2 a3 e3 e4 c5 d5 e5
+white_reply d1 b2 c2 d2 b3 c3 d3 b4 c4 d4 b5
+to_play black
+result loss
+
+candidate 105
+black a1 b1 d1 a2 e2 a4 e4 b5 d5 e5
+white_reply c1 b2 c2 d2 b3 c3 d3 c4 d4 a5 c5
+to_play black
+result loss
+
+candidate 106
+black a1 c1 d1 e2 a3 e3 a4 b5 c5 e5
+white_reply b1 b2 c2 d2 b3 c3 d3 c4 e4 a5 d5
+to_play black
+result loss
+
+candidate 107
+black b1 c1 e1 a2 a3 e3 e4 a5 c5 d5
+white_reply a1 d1 b2 c2 d2 b3 c3 d3 a4 b4 c4 d4 b5 e5
+to_play black
+result loss
+
+candidate 108
+black b1 d1 e1 a2 e2 a4 e4 a5 b5 d5
+white_reply a1 c1 b2 c2 d2 b3 c3 d3 e3 b4 c4 d4 c5 e5
+to_play black
+result loss
+
+candidate 109
+black c1 d1 e1 e2 a3 e3 a4 a5 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 c3 d3 b4 c4 d4 e4 d5 e5
+to_play black
+result loss
+
+candidate 110
+black b1 c1 a2 b2 a3 e3 d4 e4 c5 d5
+white_reply a1 d1 c2 d2 b3 c3 d3 b4 c4 b5 e5
+to_play black
+result loss
+
+candidate 111
+black b1 d1 a2 b2 e2 a4 d4 e4 b5 d5
+white_reply a1 c1 c2 a3 b3 c3 b4 c4 a5 c5 e5
+to_play black
+result loss
+
+candidate 112
+black c1 d1 b2 e2 a3 e3 a4 d4 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 c3 d3 b4 c4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 113
+black a1 b1 e1 a2 b2 d4 e4 a5 d5 e5
+white_reply c1 d1 c2 a3 b3 c3 a4 b4 c4 b5 c5
+to_play black
+result loss
+
+candidate 114
+black a1 c1 e1 b2 a3 e3 d4 a5 c5 e5
+white_reply b1 d1 a2 c2 d2 b3 c3 d3 a4 b4 c4 e4 b5 d5
+to_play black
+result loss
+
+candidate 115
+black a1 d1 e1 b2 e2 a4 d4 a5 b5 e5
+white_reply a2 c2 d2 c3 d3 e3 b4 c4 e4 c5 d5
+to_play black
+result loss
+
+candidate 116
+black a1 b1 a2 c2 b3 d3 c4 e4 d5 e5
+white_reply c3 b2 d4 c1 d2 e3
+to_play black
+result loss
+
+candidate 117
+black a1 c1 c2 a3 b3 d3 e3 c4 c5 e5
+white_reply b1 d1 e1 a2 b2 e2 c3 a4 b4 d4 e4 a5 b5 d5
+to_play black
+result loss
+
+candidate 118
+black a1 d1 c2 e2 b3 d3 a4 c4 b5 e5
+white_reply b1 c1 a2 b2 d2 a3 c3 e3 b4 d4 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 119
+black b1 e1 a2 c2 b3 d3 c4 e4 a5 d5
+white_reply a1 b2 d2 e2 a3 c3 e3 d4 b5 c5 e5
+to_play black
+result loss
+
+candidate 120
+black c1 e1 c2 a3 b3 d3 e3 c4 a5 c5
+white_reply a1 b1 d1 a2 b2 e2 c3 a4 b4 d4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 121
+black b1 a2 b2 c2 b3 d3 c4 d4 e4 d5
+white_reply a1 c1 d1 e1 e2 a3 c3 e3 a4 b4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 122
+black c1 b2 c2 a3 b3 d3 e3 c4 d4 c5
+white_reply a1 b1 d1 e1 a2 e2 c3 a4 b4 e4 a5 b5 d5 e5
+to_play black
+result loss
+
+candidate 123
+black d1 b2 c2 e2 b3 d3 a4 c4 d4 b5
+white_reply a1 b1 c1 a2 d2 a3 c3 e3 b4 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 124
+black a1 e1 b2 c2 b3 d3 c4 d4 a5 e5
+white_reply d1 a2 d2 e2 a3 c3 e3 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 125
+black b1 c1 a2 d2 a3 e3 b4 e4 c5 d5
+white_reply a1 b2 c2 b3 c3 a4 c4 d4 a5 b5 e5
+to_play black
+result loss
+
+candidate 126
+black b1 d1 a2 d2 e2 a4 b4 e4 b5 d5
+white_reply a1 c1 e1 b2 c2 b3 c3 d3 e3 c4 d4 a5 c5 e5
+to_play black
+result loss
+
+candidate 127
+black c1 d1 d2 e2 a3 e3 a4 b4 b5 c5
+white_reply a1 b1 e1 a2 c2 b3 c3 d3 c4 d4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 128
+black a1 b1 e1 a2 d2 b4 e4 a5 d5 e5
+white_reply c1 d1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 b5 c5
+to_play black
+result loss
+
+candidate 129
+black a1 c1 e1 d2 a3 e3 b4 a5 c5 e5
+white_reply b1 d1 a2 b2 c2 e2 b3 d3 a4 c4 d4 e4 b5 d5
+to_play black
+result loss
+
+candidate 130
+black a1 d1 e1 d2 e2 a4 b4 a5 b5 e5
+white_reply b1 c1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 131
+black a1 b1 a2 b2 d2 b4 d4 e4 d5 e5
+white_reply c1 e1 c2 e2 a3 c3 e3 a4 a5 b5 c5
+to_play black
+result loss
+
+candidate 132
+black a1 c1 b2 d2 a3 e3 b4 d4 c5 e5
+white_reply b1 a2 c2 b3 c3 a4 c4 e4 a5 b5 d5
+to_play black
+result loss
+
+candidate 133
+black a1 d1 b2 d2 e2 a4 b4 d4 b5 e5
+white_reply b1 c1 e1 a2 c2 a3 b3 d3 e3 c4 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 134
+black b1 e1 a2 b2 d2 b4 d4 e4 a5 d5
+white_reply a1 c1 d1 c2 e2 a3 c3 d3 e3 a4 c4 b5 c5 e5
+to_play black
+result loss
+
+candidate 135
+black c1 e1 b2 d2 a3 e3 b4 d4 a5 c5
+white_reply a1 b1 d1 a2 c2 b3 c3 d3 a4 c4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 136
+black d1 e1 b2 d2 e2 a4 b4 d4 a5 b5
+white_reply a1 b1 c1 a2 c2 a3 b3 d3 e3 c4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 137
+black b1 a2 c2 d2 b3 d3 b4 c4 e4 d5
+white_reply a1 e1 b2 e2 a3 c3 a4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 138
+black a1 b2 c2 d2 b3 d3 b4 c4 d4 e5
+white_reply d1 e1 a2 e2 a3 c3 e3 a4 b5 c5 d5
+to_play black
+result loss
+
+candidate 139
+black b1 c1 a2 a3 c3 e3 e4 c5 d5
+white_reply a1 d1 b2 d2 b3 a4 b4 c4 d4 a5 b5 e5
+to_play black
+result loss
+
+candidate 140
+black b1 d1 a2 e2 c3 a4 e4 b5 d5
+white_reply a1 c1 b2 d2 a3 b3 d3 c4 d4 a5 c5 e5
+to_play black
+result loss
+
+candidate 141
+black c1 d1 e2 a3 c3 e3 a4 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 d3 c4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 142
+black a1 b1 e1 a2 c3 e4 a5 d5 e5
+white_reply c1 d1 b2 c2 a3 b3 d3 a4 c4 d4 b5 c5
+to_play black
+result loss
+
+candidate 143
+black a1 c1 e1 a3 c3 e3 a5 c5 e5
+white_reply b1 d1 b2 d2 e2 b3 d3 c4 d4 e4 b5 d5
+to_play black
+result loss
+
+candidate 144
+black a1 d1 e1 e2 c3 a4 a5 b5 e5
+white_reply b1 c1 b2 d2 d3 e3 b4 c4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 145
+black a1 b1 a2 b2 c3 d4 e4 d5 e5
+white_reply c1 d1 e1 d2 e2 a3 e3 a4 b4 a5 b5 c5
+to_play black
+result loss
+
+candidate 146
+black a1 c1 b2 a3 c3 e3 d4 c5 e5
+white_reply b1 d1 a2 d2 b3 a4 b4 c4 e4 a5 b5 d5
+to_play black
+result loss
+
+candidate 147
+black a1 d1 b2 e2 c3 a4 d4 b5 e5
+white_reply b1 c1 e1 a2 a3 b3 d3 e3 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 148
+black b1 e1 a2 b2 c3 d4 e4 a5 d5
+white_reply a1 c1 d1 e2 a3 b3 e3 a4 c4 b5 c5 e5
+to_play black
+result loss
+
+candidate 149
+black c1 e1 b2 a3 c3 e3 d4 a5 c5
+white_reply a1 b1 d1 a2 c2 d2 b3 d3 a4 b4 c4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 150
+black d1 e1 b2 e2 c3 a4 d4 a5 b5
+white_reply a1 a2 c2 d2 d3 e3 b4 c4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 151
+black b1 a2 c2 b3 c3 d3 c4 e4 d5
+white_reply a1 e1 b2 d2 e2 a3 a4 b4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 152
+black a1 e1 c2 b3 c3 d3 c4 a5 e5
+white_reply b1 a2 b2 d2 e2 a3 e3 d4 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 153
+black a1 b2 c2 b3 c3 d3 c4 d4 e5
+white_reply d1 e1 a2 d2 e2 a3 e3 a4 b4 a5 c5 d5
+to_play black
+result loss
+
+candidate 154
+black e1 b2 c2 b3 c3 d3 c4 d4 a5
+white_reply a1 d1 a2 d2 e2 a3 e3 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 155
+black a1 b1 a2 d2 c3 b4 e4 d5 e5
+white_reply c1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 c5
+to_play black
+result loss
+
+candidate 156
+black a1 c1 d2 a3 c3 e3 b4 c5 e5
+white_reply b1 a2 b2 c2 e2 b3 d3 a4 d4 e4 b5 d5
+to_play black
+result loss
+
+candidate 157
+black b1 a2 b2 d2 c3 b4 d4 e4 d5
+white_reply a1 c1 c2 e2 a3 b3 e3 a4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 158
+black c1 b2 d2 a3 c3 e3 b4 d4 c5
+white_reply a1 b1 a2 c2 b3 a4 c4 e4 a5 b5 d5 e5
+to_play black
+result loss
+
+candidate 159
+black a1 c2 d2 b3 c3 d3 b4 c4 e5
+white_reply b1 e1 a2 b2 e2 a3 e3 a4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 160
+black b2 c2 d2 b3 c3 d3 b4 c4 d4
+white_reply a1 d1 e1 a2 e2 a3 e3 a4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 161
+black b1 c1 a2 a3 e3 e4 c5 d5
+white_reply a1 d1 b2 c2 d2 b3 c3 d3 b4 c4 d4 b5 e5
+to_play black
+result loss
+
+candidate 162
+black b1 d1 a2 e2 a4 e4 b5 d5
+white_reply a1 c1 b2 c2 d2 b3 c3 d3 c4 d4 a5 c5 e5
+to_play black
+result loss
+
+candidate 163
+black c1 d1 e2 a3 e3 a4 b5 c5
+white_reply a1 b1 a2 c2 d2 b3 c3 d3 c4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 164
+black a1 b1 e1 a2 e4 a5 d5 e5
+white_reply c1 d1 b2 c2 d2 b3 c3 d3 b4 c4 d4 b5 c5
+to_play black
+result loss
+
+candidate 165
+black a1 c1 e1 a3 e3 a5 c5 e5
+white_reply b1 d1 b2 c2 d2 b3 c3 d3 b4 c4 e4 b5 d5
+to_play black
+result loss
+
+candidate 166
+black a1 d1 e1 e2 a4 a5 b5 e5
+white_reply b1 c1 b2 d2 c3 d3 e3 b4 c4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 167
+black a1 b1 a2 b2 d4 e4 d5 e5
+white_reply c1 a3 e3 c5 c2 c4 c3
+to_play black
+result loss
+
+candidate 168
+black a1 c1 b2 a3 e3 d4 c5 e5
+white_reply b1 d1 a2 c2 d2 b3 c3 d3 b4 c4 e4 b5 d5
+to_play black
+result loss
+
+candidate 169
+black a1 d1 b2 e2 a4 d4 b5 e5
+white_reply c2 d3 a3 b4 c5 b1 e4
+to_play black
+result loss
+
+candidate 170
+black b1 e1 a2 b2 d4 e4 a5 d5
+white_reply a1 c1 d1 c2 a3 b3 c3 a4 b4 c4 b5 c5 e5
+to_play black
+result loss
+
+candidate 171
+black c1 e1 b2 a3 e3 d4 a5 c5
+white_reply a1 b1 d1 a2 c2 d2 b3 c3 d3 a4 b4 c4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 172
+black d1 e1 b2 e2 a4 d4 a5 b5
+white_reply a1 a2 c2 d2 c3 d3 e3 b4 c4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 173
+black b1 a2 c2 b3 d3 c4 e4 d5
+white_reply c3 b2 d4 a1 e5 c1 d2 e3
+to_play black
+result loss
+
+candidate 174
+black c1 c2 a3 b3 d3 e3 c4 c5
+white_reply a1 b1 d1 e1 a2 b2 e2 c3 a4 b4 d4 e4 a5 b5 d5 e5
+to_play black
+result loss
+
+candidate 175
+black d1 c2 e2 b3 d3 a4 c4 b5
+white_reply a1 b1 c1 a2 b2 d2 a3 c3 e3 b4 d4 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 176
+black a1 e1 c2 b3 d3 c4 a5 e5
+white_reply b1 a2 b2 d2 e2 a3 c3 e3 d4 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 177
+black a1 b2 c2 b3 d3 c4 d4 e5
+white_reply c3 c1 a3 e3 c5 d2 b1 e4
+to_play black
+result loss
+
+candidate 178
+black e1 b2 c2 b3 d3 c4 d4 a5
+white_reply a1 d1 a2 d2 e2 a3 c3 e3 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 179
+black a1 b1 a2 d2 b4 e4 d5 e5
+white_reply c3 b2 d4 d1 e2
+to_play black
+result loss
+
+candidate 180
+black a1 c1 d2 a3 e3 b4 c5 e5
+white_reply c3 b2 d4 d1 e2 a4 b5 b1 d5
+to_play black
+result loss
+
+candidate 181
+black a1 d1 d2 e2 a4 b4 b5 e5
+white_reply b1 c1 e1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 182
+black b1 e1 a2 d2 b4 e4 a5 d5
+white_reply a1 c1 d1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 b5 c5 e5
+to_play black
+result loss
+
+candidate 183
+black c1 e1 d2 a3 e3 b4 a5 c5
+white_reply a1 b1 d1 a2 b2 c2 e2 b3 d3 a4 c4 d4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 184
+black d1 e1 d2 e2 a4 b4 a5 b5
+white_reply a1 b1 c1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 185
+black b1 a2 b2 d2 b4 d4 e4 d5
+white_reply a1 c1 e1 c2 e2 a3 c3 e3 a4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 186
+black c1 b2 d2 a3 e3 b4 d4 c5
+white_reply a1 b1 a2 c2 b3 c3 a4 c4 e4 a5 b5 d5 e5
+to_play black
+result loss
+
+candidate 187
+black d1 b2 d2 e2 a4 b4 d4 b5
+white_reply a1 b1 c1 e1 a2 c2 a3 b3 d3 e3 c4 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 188
+black a1 e1 b2 d2 b4 d4 a5 e5
+white_reply b1 c1 d1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 189
+black a1 c2 d2 b3 d3 b4 c4 e5
+white_reply b1 e1 a2 b2 e2 a3 c3 e3 a4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 190
+black b2 c2 d2 b3 d3 b4 c4 d4
+white_reply a1 d1 e1 a2 e2 a3 c3 e3 a4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 191
+black a1 b1 a2 c3 e4 d5 e5
+white_reply b2 d4 d2 b4
+to_play black
+result loss
+
+candidate 192
+black a1 c1 a3 c3 e3 c5 e5
+white_reply c2 d3 b1 e4 b3 a2 d5
+to_play black
+result loss
+
+candidate 193
+black a1 d1 e2 c3 a4 b5 e5
+white_reply b1 c1 e1 a2 b2 a3 b3 d3 e3 d4 e4 a5 c5 d5
+to_play black
+result loss
+
+candidate 194
+black b1 e1 a2 c3 e4 a5 d5
+white_reply a1 c1 d1 b2 c2 a3 b3 d3 a4 c4 d4 b5 c5 e5
+to_play black
+result loss
+
+candidate 195
+black c1 e1 a3 c3 e3 a5 c5
+white_reply a1 b1 d1 a2 d2 e2 b3 d3 c4 d4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 196
+black d1 e1 e2 c3 a4 a5 b5
+white_reply a1 b1 c1 a2 b2 a3 d3 e3 c4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 197
+black b1 a2 b2 c3 d4 e4 d5
+white_reply a1 c1 d1 e1 d2 e2 a3 e3 a4 b4 a5 b5 c5 e5
+to_play black
+result loss
+
+candidate 198
+black c1 b2 a3 c3 e3 d4 c5
+white_reply a1 b1 d1 a2 d2 b3 a4 b4 c4 e4 a5 b5 d5 e5
+to_play black
+result loss
+
+candidate 199
+black d1 b2 e2 c3 a4 d4 b5
+white_reply a1 b1 c1 e1 a2 a3 b3 d3 e3 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 200
+black a1 e1 b2 c3 d4 a5 e5
+white_reply c2 d3 b4 b1 e4 a2 d5 d1
+to_play black
+result loss
+
+candidate 201
+black a1 c2 b3 c3 d3 c4 e5
+white_reply b1 e1 a2 b2 d2 e2 a3 e3 a4 b4 d4 e4 a5 d5
+to_play black
+result loss
+
+candidate 202
+black e1 c2 b3 c3 d3 c4 a5
+white_reply a1 b1 a2 b2 d2 e2 a3 e3 d4 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 203
+black b2 c2 b3 c3 d3 c4 d4
+white_reply a1 d1 e1 a2 d2 e2 a3 e3 a4 b4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 204
+black b1 a2 d2 c3 b4 e4 d5
+white_reply a1 c1 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 c5 e5
+to_play black
+result loss
+
+candidate 205
+black c1 d2 a3 c3 e3 b4 c5
+white_reply a1 b1 a2 b2 c2 e2 b3 d3 a4 d4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 206
+black a1 b2 d2 c3 b4 d4 e5
+white_reply b1 c1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 c5 d5
+to_play black
+result loss
+
+candidate 207
+black c2 d2 b3 c3 d3 b4 c4
+white_reply a1 b1 e1 a2 b2 e2 a3 e3 a4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 208
+black a1 b1 a2 e4 d5 e5
+white_reply b2 d4 c1 c5
+to_play black
+result loss
+
+candidate 209
+black a1 c1 a3 e3 c5 e5
+white_reply b2 d4 b1 e4 d5
+to_play black
+result loss
+
+candidate 210
+black a1 d1 e2 a4 b5 e5
+white_reply d2 b4 c1 a3 c5 b1
+to_play black
+result loss
+
+candidate 211
+black b1 e1 a2 e4 a5 d5
+white_reply a1 c1 d1 b2 c2 d2 b3 c3 d3 b4 c4 d4 b5 c5 e5
+to_play black
+result loss
+
+candidate 212
+black c1 e1 a3 e3 a5 c5
+white_reply a1 b1 d1 a2 c2 d2 b3 c3 d3 b4 c4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 213
+black d1 e1 e2 a4 a5 b5
+white_reply a1 b1 c1 a2 b2 d2 a3 c3 e3 b4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 214
+black b1 a2 b2 d4 e4 d5
+white_reply c1 a3 e3 c5 a1 e5 c2 c4 c3
+to_play black
+result loss
+
+candidate 215
+black c1 b2 a3 e3 d4 c5
+white_reply a1 b1 d1 a2 c2 d2 b3 c3 d3 b4 c4 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 216
+black d1 b2 e2 a4 d4 b5
+white_reply c2 d3 a3 b4 c5 c1
+to_play black
+result loss
+
+candidate 217
+black a1 e1 b2 d4 a5 e5
+white_reply b1 e4 a2 d5 c2 d3 b5 d1 c4
+to_play black
+result loss
+
+candidate 218
+black a1 c2 b3 d3 c4 e5
+white_reply c3 b2 d4 d2 b5 b1 d5
+to_play black
+result loss
+
+candidate 219
+black e1 c2 b3 d3 c4 a5
+white_reply a1 b1 a2 b2 d2 e2 a3 c3 e3 d4 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 220
+black b2 c2 b3 d3 c4 d4
+white_reply c3 c1 a3 e3 c5 d2 a2 e4 a1 e5
+to_play black
+result loss
+
+candidate 221
+black b1 a2 d2 b4 e4 d5
+white_reply c3 b2 d4 a1 e5 d1 e2
+to_play black
+result loss
+
+candidate 222
+black c1 d2 a3 e3 b4 c5
+white_reply c3 b2 d4 d1 e2 d5
+to_play black
+result loss
+
+candidate 223
+black d1 d2 e2 a4 b4 b5
+white_reply a1 b1 c1 e1 a2 b2 c2 a3 b3 d3 e3 c4 d4 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 224
+black a1 e1 d2 b4 a5 e5
+white_reply b1 c1 d1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 b5 c5 d5
+to_play black
+result loss
+
+candidate 225
+black a1 b2 d2 b4 d4 e5
+white_reply c3 b1 e4 c2 c4 a2 a4 a3
+to_play black
+result loss
+
+candidate 226
+black e1 b2 d2 b4 d4 a5
+white_reply a1 b1 c1 d1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 227
+black c2 d2 b3 d3 b4 c4
+white_reply a1 b1 e1 a2 b2 e2 a3 c3 e3 a4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 228
+black b1 a2 c3 e4 d5
+white_reply b2 d4 a1 e5 d2 b4
+to_play black
+result loss
+
+candidate 229
+black c1 a3 c3 e3 c5
+white_reply c2 d3 b3 d4 b1
+to_play black
+result loss
+
+candidate 230
+black d1 e2 c3 a4 b5
+white_reply a1 b1 c1 e1 a2 b2 a3 b3 d3 e3 d4 e4 a5 c5 d5 e5
+to_play black
+result loss
+
+candidate 231
+black a1 e1 c3 a5 e5
+white_reply d2 b4 b1 e4 b3
+to_play black
+result loss
+
+candidate 232
+black a1 b2 c3 d4 e5
+white_reply c2 d3 b1 e4
+to_play black
+result loss
+
+candidate 233
+black e1 b2 c3 d4 a5
+white_reply c2 d3 b4 a3 c5 b1 d1 a2 a1
+to_play black
+result loss
+
+candidate 234
+black c2 b3 c3 d3 c4
+white_reply a1 b1 e1 a2 b2 d2 e2 a3 e3 a4 b4 d4 e4 a5 d5 e5
+to_play black
+result loss
+
+candidate 235
+black a1 d2 c3 b4 e5
+white_reply b1 c1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 c5 d5
+to_play black
+result loss
+
+candidate 236
+black b2 d2 c3 b4 d4
+white_reply a1 b1 c1 a2 c2 e2 a3 b3 d3 e3 a4 c4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 237
+black b1 a2 e4 d5
+white_reply b2 d4 a1 e5 c1 c5
+to_play black
+result loss
+
+candidate 238
+black c1 a3 e3 c5
+white_reply b2 d4 d1 b5
+to_play black
+result loss
+
+candidate 239
+black d1 e2 a4 b5
+white_reply d2 b4 c1 a3 a1 a2
+to_play black
+result loss
+
+candidate 240
+black a1 e1 a5 e5
+white_reply d2 b4 b1 e4
+to_play black
+result loss
+
+candidate 241
+black a1 b2 d4 e5
+white_reply d1 d2 b4 b5
+to_play black
+result loss
+
+candidate 242
+black e1 b2 d4 a5
+white_reply c2 d3 a3 b4 e4 d1 a2 a1 e5
+to_play black
+result loss
+
+candidate 243
+black c2 b3 d3 c4
+white_reply c3 b2 d4 d2 a3 e3 a1 e5 b1 d5 a2 e4
+to_play black
+result loss
+
+candidate 244
+black a1 d2 b4 e5
+white_reply c3 b1 d1 d5
+to_play black
+result loss
+
+candidate 245
+black e1 d2 b4 a5
+white_reply a1 b1 c1 d1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 b5 c5 d5 e5
+to_play black
+result loss
+
+candidate 246
+black b2 d2 b4 d4
+white_reply c3 c2 d3 e4 e5
+to_play black
+result loss
+
+candidate 247
+black a1 c3 e5
+white_reply b1 b2 d4 d5
+to_play black
+result loss
+
+candidate 248
+black e1 c3 a5
+white_reply a1
+to_play black
+result loss
+
+candidate 249
+black b2 c3 d4
+white_reply a1 a2 e2 a3 e3 a4 e4 e5
+to_play black
+result loss
+
+candidate 250
+black d2 c3 b4
+white_reply a1 b1 c1 a2 b2 c2 e2 a3 b3 d3 e3 a4 c4 d4 e4 c5 d5 e5
+to_play black
+result loss
+
+candidate 252
+black e1 a5
+white_reply a1 b1 d1 a2 e4 b5 d5 e5
+to_play black
+result loss
+
+candidate 253
+black b2 d4
+white_reply a1 a2 a3 e3 e4 e5
+to_play black
+result loss
+
+candidate 254
+black d2 b4
+white_reply a1 a2 e2 a3 e3 a4 e4 e5
+to_play black
+result loss

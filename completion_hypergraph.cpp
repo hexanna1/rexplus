@@ -21,7 +21,7 @@ std::uint64_t InitialBlack;
 std::uint64_t InitialWhite;
 std::uint64_t Empty;
 int EmptyCells;
-std::uint32_t CompactLimit;
+std::uint32_t CompactMask;
 std::uint64_t Left;
 std::uint64_t Right;
 
@@ -106,28 +106,59 @@ std::string names(std::uint32_t compact)
 
 std::vector<std::uint32_t> minimal_completions()
 {
-    std::vector<std::uint8_t> connects(CompactLimit);
+    std::array<std::uint32_t, 64> weight{};
+    for (int i = 0; i < EmptyCells; ++i)
+        weight[std::countr_zero(EmptyCell[i])] = std::uint32_t{1} << i;
+    std::array<std::vector<std::uint32_t>, 64> carriers;
+    std::deque<std::pair<int, std::uint32_t>> queue;
     std::vector<std::uint32_t> result;
-    std::uint32_t previous = 0;
-    std::uint64_t stones = 0;
-    for (std::uint32_t index = 1; index < CompactLimit; ++index)
+    auto insert = [](auto& family, std::uint32_t carrier) {
+        for (std::uint32_t edge : family)
+            if (!(edge & ~carrier))
+                return false;
+        std::erase_if(family, [carrier](std::uint32_t edge) {
+            return !(carrier & ~edge);
+        });
+        family.push_back(carrier);
+        return true;
+    };
+    for (auto work = Left & ~InitialBlack; work; work &= work - 1)
     {
-        const std::uint32_t subset = index ^ (index >> 1);
-        const std::uint32_t changed = subset ^ previous;
-        stones ^= EmptyCell[std::countr_zero(changed)];
-        connects[subset] = connected(InitialWhite | stones, 1);
-        previous = subset;
+        const int point = std::countr_zero(work);
+        insert(carriers[point], weight[point]);
+        queue.emplace_back(point, weight[point]);
     }
-    for (std::uint32_t subset = 1; subset < CompactLimit; ++subset)
+    while (!queue.empty())
     {
-        if (!connects[subset])
+        auto [point, carrier] = queue.front();
+        queue.pop_front();
+        if (std::find(carriers[point].begin(), carriers[point].end(), carrier)
+            == carriers[point].end())
             continue;
-        bool minimal = true;
-        for (auto work = subset; work && minimal; work &= work - 1)
-            minimal = !connects[subset & ~(work & -work)];
-        if (minimal)
-            result.push_back(subset);
+        bool finished = false;
+        for (std::uint32_t edge : result)
+            if (!(edge & ~carrier))
+            {
+                finished = true;
+                break;
+            }
+        if (finished)
+            continue;
+        if (bit(point) & Right)
+        {
+            insert(result, carrier);
+            continue;
+        }
+        for (auto work = Neighbors[point] & ~InitialBlack;
+             work; work &= work - 1)
+        {
+            const int next = std::countr_zero(work);
+            const auto extension = carrier | weight[next];
+            if (insert(carriers[next], extension))
+                queue.emplace_back(next, extension);
+        }
     }
+    std::sort(result.begin(), result.end());
     return result;
 }
 
@@ -147,6 +178,24 @@ class HypergraphPool
 public:
     std::uint32_t intern(std::vector<std::uint32_t> edges)
     {
+        // Packing preserves numeric edge order.
+        std::uint32_t support = 0;
+        for (std::uint32_t edge : edges)
+            support |= edge;
+        if (support & (support + 1))
+        {
+            std::array<std::uint32_t, 32> mapping{};
+            std::uint32_t target = 1;
+            for (auto work = support; work; work &= work - 1, target <<= 1)
+                mapping[std::countr_zero(work)] = target;
+            for (std::uint32_t& edge : edges)
+            {
+                std::uint32_t packed = 0;
+                for (auto work = edge; work; work &= work - 1)
+                    packed |= mapping[std::countr_zero(work)];
+                edge = packed;
+            }
+        }
         const std::uint32_t hash = edge_hash(edges);
         if (index_hashes.empty())
             resize_index(1024);
@@ -305,9 +354,11 @@ public:
                const std::vector<std::uint32_t>& edges,
                bool black_turn)
     {
+        std::uint32_t active = 0;
+        for (std::uint32_t edge : edges)
+            active |= edge;
         const std::uint32_t id = pool.intern(edges);
-        return win(id, (remaining & ~pool[id].active) != 0,
-                   black_turn);
+        return win(id, (remaining & ~active) != 0, black_turn);
     }
 
     std::uint64_t states() const { return solved_states; }
@@ -318,59 +369,49 @@ public:
         std::uint32_t remaining, std::vector<std::uint32_t> edges,
         bool black_turn)
     {
-        std::uint32_t id = pool.intern(std::move(edges));
-        std::uint32_t active = pool[id].active;
-        bool isolates = (remaining & ~active) != 0;
-        if (!win(id, isolates, black_turn))
+        if (!solve(remaining, edges, black_turn))
             return 0;
         std::uint32_t batch = 0;
         for (;;)
         {
-            if (isolates)
-            {
-                const std::uint32_t dead = remaining & ~active;
-                if (!win(id, false, !black_turn))
-                    return batch | dead;
-                if (win(id, false, black_turn))
-                {
-                    batch |= dead;
-                    remaining &= ~dead;
-                    isolates = false;
-                    continue;
-                }
-            }
+            std::uint32_t active = 0;
+            for (std::uint32_t edge : edges)
+                active |= edge;
+            const std::uint32_t dead = remaining & ~active;
             bool continued = false;
+            // Witnesses use physical labels; value queries pack them.
+            std::vector<std::uint32_t> choices;
+            if (dead)
+                choices.push_back(dead & -dead);
             for (auto work = active; work; work &= work - 1)
+                choices.push_back(work & -work);
+            for (std::uint32_t cell : choices)
             {
-                const std::uint32_t cell = work & -work;
+                const std::uint32_t taken = cell & dead ? dead : cell;
                 std::vector<std::uint32_t> child;
-                if (black_turn)
+                if (cell & dead)
+                    child = edges;
+                else if (black_turn)
                 {
-                    child = black_child(pool.edges(id), cell);
+                    child = black_child(edges, cell);
                     if (child.empty())
                         continue;
                 }
                 else
                 {
                     bool legal;
-                    child = white_child(pool.edges(id), cell, legal);
+                    child = white_child(edges, cell, legal);
                     if (!legal)
                         continue;
                 }
-                const std::uint32_t rest = active & ~cell;
-                const std::uint32_t child_id = pool.intern(std::move(child));
-                const std::uint32_t child_active = pool[child_id].active;
-                const bool child_isolates =
-                    isolates || (rest & ~child_active);
-                if (!win(child_id, child_isolates, !black_turn))
-                    return batch | cell;
-                if (win(child_id, child_isolates, black_turn))
+                const std::uint32_t rest = remaining & ~taken;
+                if (!solve(rest, child, !black_turn))
+                    return batch | taken;
+                if (solve(rest, child, black_turn))
                 {
-                    batch |= cell;
-                    remaining &= ~cell;
-                    active = child_active;
-                    isolates = child_isolates;
-                    id = child_id;
+                    batch |= taken;
+                    remaining = rest;
+                    edges = std::move(child);
                     continued = true;
                     break;
                 }
@@ -385,30 +426,28 @@ private:
         std::span<const std::uint32_t> edges, std::uint32_t cell,
         bool& legal)
     {
-        std::vector<std::uint32_t> candidates;
-        candidates.reserve(edges.size());
+        std::vector<std::uint32_t> reduced;
+        reduced.reserve(edges.size());
         legal = true;
         for (std::uint32_t edge : edges)
         {
-            const std::uint32_t reduced = edge & ~cell;
-            if (!reduced)
+            if (!(edge & cell))
+                continue;
+            if (edge == cell)
             {
                 legal = false;
                 return {};
             }
-            candidates.push_back(reduced);
+            reduced.push_back(edge & ~cell);
         }
-        std::sort(candidates.begin(), candidates.end(),
-                  [](std::uint32_t lhs, std::uint32_t rhs) {
-                      const int a = std::popcount(lhs);
-                      const int b = std::popcount(rhs);
-                      return a != b ? a < b : lhs < rhs;
-                  });
-        std::vector<std::uint32_t> result;
-        for (std::uint32_t edge : candidates)
+        // Only shortened edges can dominate unchanged edges.
+        std::vector<std::uint32_t> result = reduced;
+        for (std::uint32_t edge : edges)
         {
+            if (edge & cell)
+                continue;
             bool dominated = false;
-            for (std::uint32_t kept : result)
+            for (std::uint32_t kept : reduced)
                 if (!(kept & ~edge))
                 {
                     dominated = true;
@@ -417,7 +456,8 @@ private:
             if (!dominated)
                 result.push_back(edge);
         }
-        std::sort(result.begin(), result.end());
+        std::inplace_merge(result.begin(), result.begin() + reduced.size(),
+                           result.end());
         return result;
     }
 
@@ -442,12 +482,13 @@ private:
         if (pool[id].known[turn] & state)
             return pool[id].wins[turn] & state;
 
-        if (isolates
-            && (!win(id, false, !black_turn)
-                || win(id, false, black_turn)))
+        // Dead cells preserve the continue/end predicate.
+        if (isolates)
         {
-            remember(id, turn, state, true);
-            return true;
+            const bool result = !win(id, false, !black_turn)
+                                || win(id, false, black_turn);
+            remember(id, turn, state, result);
+            return result;
         }
 
         const std::uint32_t active = pool[id].active;
@@ -477,13 +518,9 @@ private:
                 if (!legal)
                     continue;
             }
-            const std::uint32_t rest = active & ~cell;
             const std::uint32_t child_id = pool.intern(std::move(child));
-            const std::uint32_t child_active = pool[child_id].active;
-            const bool child_isolates =
-                isolates || (rest & ~child_active);
-            if (!win(child_id, child_isolates, !black_turn)
-                || win(child_id, child_isolates, black_turn))
+            if (!win(child_id, false, !black_turn)
+                || win(child_id, false, black_turn))
             {
                 remember(id, turn, state, true);
                 return true;
@@ -566,10 +603,11 @@ void initialize_position(const std::string& black,
     if (!connected(InitialWhite | Empty, 1))
         throw std::invalid_argument("White has no completion");
     EmptyCells = std::popcount(Empty);
-    if (EmptyCells > 24)
+    if (EmptyCells > 32)
         throw std::invalid_argument(
-            "completion construction supports at most 24 empty cells");
-    CompactLimit = std::uint32_t{1} << EmptyCells;
+            "completion construction supports at most 32 empty cells");
+    CompactMask = EmptyCells == 32 ? ~std::uint32_t{0}
+                                  : (std::uint32_t{1} << EmptyCells) - 1;
     EmptyCell = make_empty_cells();
 }
 
@@ -591,7 +629,7 @@ int main(int argc, char** argv)
         const auto edges = minimal_completions();
         Solver solver;
         const bool mover_wins = solver.solve(
-            CompactLimit - 1, edges, black_turn);
+            CompactMask, edges, black_turn);
         std::cout << "board_size " << Size << '\n'
                   << "black " << board_names(InitialBlack) << '\n'
                   << "white " << board_names(InitialWhite) << '\n'
@@ -607,7 +645,7 @@ int main(int argc, char** argv)
         if (mover_wins)
             std::cout << "winning_batch "
                       << names(solver.winning_batch(
-                             CompactLimit - 1, edges, black_turn))
+                             CompactMask, edges, black_turn))
                       << '\n';
         return 0;
     }

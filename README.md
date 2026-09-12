@@ -28,7 +28,6 @@ outcomes needed to rule them out. Successful verification ends with
 the two largest searches run sequentially.
 
 `ctest --test-dir build` runs the small-board equivalence check alone.
-Full verification needs several gigabytes of available memory.
 
 ## Proof
 
@@ -72,12 +71,21 @@ sets of empty cells that would complete White's connection. White taking a
 cell removes it from each set and then removes redundant supersets. Black
 taking a cell deletes every set containing it. White connects exactly when
 an empty set appears; by Hex duality, Black connects exactly when no set
-remains. Cells outside the edges are dead for both players. The Rex+ dead-cell
-identity reduces any positive number of them to one. The search state is
-therefore the hypergraph, whether a dead cell remains, and the player to move.
-Equal search states share their computed outcomes. Vertices appearing
-in exactly the same edges are interchangeable, so the search considers one
-representative of each such class at a node.
+remains.
+
+Cells outside the edges are dead for both players. Multiple dead cells are
+equivalent to a single dead cell (Keras, Lemma 7.3). If `(b,w)` records whether
+Black and White can win on their turn, adding a dead cell gives
+`(b OR NOT w, w OR NOT b)`. This preserves the continue/end predicate, allowing
+the recursive search to omit dead cells.
+
+Active vertices are renumbered before interning so that equivalent edge sets
+can share computed outcomes. Vertices appearing in exactly the same edges
+are interchangeable, so the search considers one representative of each
+such class at a node.
+
+The initial hypergraph is constructed by propagating minimal sets of required
+empty cells along White paths through the board.
 
 The independent Python audit enumerates all 11,741 nonterminal 3×3 boards
 and both players, comparing the quotient with direct full-batch minimax.
@@ -92,4 +100,4 @@ build/rexplus_hypergraph 5 c3 - white
 
 Use `-` for an empty stone set. The direct solver accepts `--tt-mb N` and
 `--time SECONDS`; reaching a limit returns `unknown`. The hypergraph engine
-requires at most 24 empty cells.
+requires at most 32 empty cells.

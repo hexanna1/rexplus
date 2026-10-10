@@ -4,23 +4,24 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>
-#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <tuple>
-#include <unordered_set>
-#include <unordered_map>
 #include <vector>
+#include "search_limits.hpp"
 
-namespace {
+namespace
+{
 
-enum class Result : std::uint8_t { Loss = 0, Win = 1, Unknown = 2 };
+enum class Result : std::uint8_t
+{
+    Loss = 0,
+    Win = 1,
+    Unknown = 2
+};
 
 const char* result_name(Result result)
 {
@@ -70,15 +71,13 @@ std::uint64_t key_hash(const Key& key)
 
 class TranspositionTable
 {
-public:
-    TranspositionTable(int cells, std::size_t megabytes)
-        : compact(cells <= 36)
+  public:
+    TranspositionTable(int cells, std::size_t megabytes) : compact(cells <= 36)
     {
         constexpr std::size_t Scale = 1024ULL * 1024ULL;
         if (megabytes > std::numeric_limits<std::size_t>::max() / Scale)
             throw std::invalid_argument("transposition table is too large");
-        std::size_t entry_size = compact ? sizeof(std::uint64_t)
-                                         : sizeof(WideEntry);
+        std::size_t entry_size = compact ? sizeof(std::uint64_t) : sizeof(WideEntry);
         const std::size_t requested = megabytes * Scale / entry_size;
         std::size_t count = 1;
         while (count < requested && count < (std::size_t(1) << 34))
@@ -93,8 +92,11 @@ public:
         mask = count - 1;
     }
 
-    bool find(const Key& key, std::uint64_t code,
-              int color, Result& result, Result* other_result = nullptr,
+    bool find(const Key& key,
+              std::uint64_t code,
+              int color,
+              Result& result,
+              Result* other_result = nullptr,
               bool* other_witness = nullptr) const
     {
         if (other_result)
@@ -102,28 +104,25 @@ public:
         if (other_witness)
             *other_witness = false;
         if (!compact)
-            return find_wide(key, color, result, other_result,
-                             other_witness);
+            return find_wide(key, color, result, other_result, other_witness);
         const std::size_t home = mix64(code) & mask;
         const std::uint64_t wanted = code << MetaBits;
         for (std::size_t offset = 0; offset < ProbeCount; ++offset)
         {
-            const std::uint64_t entry =
-                compact_entries[(home + offset) & mask];
+            const std::uint64_t entry = compact_entries[(home + offset) & mask];
+            if (!entry)
+                return false;
             if ((entry & ~MetaMask) == wanted)
             {
                 const std::uint8_t known = entry & KnownMask;
                 const std::uint8_t wins = (entry >> 2) & KnownMask;
                 if (other_result || other_witness)
                 {
-                    const std::uint8_t other_bit =
-                        std::uint8_t(1) << (color ^ 1);
+                    const std::uint8_t other_bit = std::uint8_t(1) << (color ^ 1);
                     if (other_result && (known & other_bit))
-                        *other_result = wins & other_bit
-                            ? Result::Win : Result::Loss;
+                        *other_result = wins & other_bit ? Result::Win : Result::Loss;
                     if (other_witness)
-                        *other_witness = entry
-                            & (std::uint64_t(other_bit) << 4);
+                        *other_witness = entry & (std::uint64_t(other_bit) << 4);
                 }
                 const std::uint8_t bit = std::uint8_t(1) << color;
                 if (!(known & bit))
@@ -135,8 +134,8 @@ public:
         return false;
     }
 
-    void store(const Key& key, std::uint64_t code, int color, Result result,
-               bool witness = false)
+    void
+    store(const Key& key, std::uint64_t code, int color, Result result, bool witness = false)
     {
         if (!compact)
         {
@@ -180,7 +179,7 @@ public:
                        : wide_entries.size() * sizeof(WideEntry);
     }
 
-private:
+  private:
     static constexpr std::size_t ProbeCount = 8;
     static constexpr int MetaBits = 6;
     static constexpr std::uint64_t MetaMask = 0x3f;
@@ -195,22 +194,25 @@ private:
         std::uint8_t witnesses = 0;
     };
 
-    bool find_wide(const Key& key, int color, Result& result,
-                   Result* other_result, bool* other_witness) const
+    bool find_wide(const Key& key,
+                   int color,
+                   Result& result,
+                   Result* other_result,
+                   bool* other_witness) const
     {
         const std::size_t home = key_hash(key) & mask;
         for (std::size_t offset = 0; offset < ProbeCount; ++offset)
         {
             const WideEntry& entry = wide_entries[(home + offset) & mask];
+            if (!entry.valid)
+                return false;
             if (entry.valid && entry.key == key)
             {
                 if (other_result || other_witness)
                 {
-                    const std::uint8_t other_bit =
-                        std::uint8_t(1) << (color ^ 1);
+                    const std::uint8_t other_bit = std::uint8_t(1) << (color ^ 1);
                     if (other_result && (entry.known & other_bit))
-                        *other_result = entry.wins & other_bit
-                            ? Result::Win : Result::Loss;
+                        *other_result = entry.wins & other_bit ? Result::Win : Result::Loss;
                     if (other_witness)
                         *other_witness = entry.witnesses & other_bit;
                 }
@@ -268,7 +270,7 @@ private:
 
 class WinningSetTable
 {
-public:
+  public:
     WinningSetTable(int cells, std::size_t megabytes)
     {
         if (cells > 30 || megabytes == 0)
@@ -325,7 +327,7 @@ public:
 
     std::size_t bytes() const { return entries.size() * sizeof(Entry); }
 
-private:
+  private:
     static constexpr std::size_t ProbeCount = 4;
     struct Entry
     {
@@ -338,9 +340,8 @@ private:
 
 class MonotoneTable
 {
-public:
-    MonotoneTable(int cells, std::size_t megabytes)
-        : compact(cells <= 30), cell_count(cells)
+  public:
+    MonotoneTable(int cells, std::size_t megabytes) : compact(cells <= 30), cell_count(cells)
     {
         constexpr std::size_t Scale = 1024ULL * 1024ULL;
         if (megabytes > std::numeric_limits<std::size_t>::max() / Scale)
@@ -350,14 +351,13 @@ public:
         {
             std::size_t bucket_count = 1024;
             const std::size_t bucket_budget = bytes / 4;
-            while (bucket_count
-                   <= bucket_budget / (2 * sizeof(std::uint32_t)))
+            while (bucket_count <= bucket_budget / (2 * sizeof(std::uint32_t)))
                 bucket_count <<= 1;
             heads.assign(bucket_count, None);
             bucket_mask = bucket_count - 1;
-            const std::size_t record_bytes =
-                bytes > bucket_count * sizeof(std::uint32_t)
-                ? bytes - bucket_count * sizeof(std::uint32_t) : 0;
+            const std::size_t record_bytes = bytes > bucket_count * sizeof(std::uint32_t)
+                                                 ? bytes - bucket_count * sizeof(std::uint32_t)
+                                                 : 0;
             record_capacity = std::min<std::size_t>(
                 std::max<std::size_t>(record_bytes / sizeof(Record), 1024),
                 std::numeric_limits<std::uint32_t>::max());
@@ -386,15 +386,12 @@ public:
         while (index != None)
         {
             const Record& record = records[index];
-            const std::uint64_t known_occupied =
-                record.data & board_mask;
+            const std::uint64_t known_occupied = record.data & board_mask;
             const int known_color = (record.data >> (2 * cell_count)) & 1;
             if (known_occupied == occupied && known_color == color)
             {
-                const std::uint64_t known_own =
-                    (record.data >> cell_count) & board_mask;
-                const bool win =
-                    (record.data >> (2 * cell_count + 1)) & 1;
+                const std::uint64_t known_own = (record.data >> cell_count) & board_mask;
+                const bool win = (record.data >> (2 * cell_count + 1)) & 1;
                 if (win && (query_own & ~known_own) == 0)
                 {
                     result = Result::Win;
@@ -411,8 +408,7 @@ public:
         return false;
     }
 
-    bool find_witness(const Key& key, int color,
-                      std::uint64_t& witness) const
+    bool find_witness(const Key& key, int color, std::uint64_t& witness) const
     {
         if (!compact)
             return false;
@@ -423,15 +419,11 @@ public:
         {
             const Record& record = records[index];
             const std::uint64_t known_occupied = record.data & board_mask;
-            const std::uint64_t known_own =
-                (record.data >> cell_count) & board_mask;
-            const int known_color =
-                (record.data >> (2 * cell_count)) & 1;
-            const bool known_win =
-                (record.data >> (2 * cell_count + 1)) & 1;
-            if (known_occupied == occupied && known_color == color
-                && known_win && record.witness
-                && known_own == own)
+            const std::uint64_t known_own = (record.data >> cell_count) & board_mask;
+            const int known_color = (record.data >> (2 * cell_count)) & 1;
+            const bool known_win = (record.data >> (2 * cell_count + 1)) & 1;
+            if (known_occupied == occupied && known_color == color && known_win &&
+                record.witness && known_own == own)
             {
                 witness = record.witness;
                 return true;
@@ -441,8 +433,7 @@ public:
         return false;
     }
 
-    void store(const Key& key, int color, Result result,
-               std::uint64_t witness = 0)
+    void store(const Key& key, int color, Result result, std::uint64_t witness = 0)
     {
         if (!compact)
         {
@@ -461,25 +452,20 @@ public:
             const std::uint32_t next = record.next;
             const std::uint64_t known_occupied = record.data & board_mask;
             const int known_color = (record.data >> (2 * cell_count)) & 1;
-            const bool known_win =
-                (record.data >> (2 * cell_count + 1)) & 1;
-            if (known_occupied == occupied && known_color == color
-                && known_win == win)
+            const bool known_win = (record.data >> (2 * cell_count + 1)) & 1;
+            if (known_occupied == occupied && known_color == color && known_win == win)
             {
-                const std::uint64_t known_own =
-                    (record.data >> cell_count) & board_mask;
-                const bool known_dominates = win
-                    ? (own & ~known_own) == 0
-                    : (known_own & ~own) == 0;
+                const std::uint64_t known_own = (record.data >> cell_count) & board_mask;
+                const bool known_dominates =
+                    win ? (own & ~known_own) == 0 : (known_own & ~own) == 0;
                 if (known_dominates)
                 {
                     if (win && witness && known_own == own)
                         record.witness = static_cast<std::uint32_t>(witness);
                     return;
                 }
-                const bool new_dominates = win
-                    ? (known_own & ~own) == 0
-                    : (own & ~known_own) == 0;
+                const bool new_dominates =
+                    win ? (known_own & ~own) == 0 : (own & ~known_own) == 0;
                 if (new_dominates)
                 {
                     if (previous == None)
@@ -496,22 +482,20 @@ public:
             current = next;
         }
 
-        const std::uint64_t data = occupied | (own << cell_count)
-            | (std::uint64_t(color) << (2 * cell_count))
-            | (std::uint64_t(win) << (2 * cell_count + 1));
+        const std::uint64_t data = occupied | (own << cell_count) |
+                                   (std::uint64_t(color) << (2 * cell_count)) |
+                                   (std::uint64_t(win) << (2 * cell_count + 1));
         std::uint32_t index;
         if (records.size() < record_capacity)
         {
             index = static_cast<std::uint32_t>(records.size());
-            records.push_back({data, heads[home],
-                               static_cast<std::uint32_t>(witness)});
+            records.push_back({data, heads[home], static_cast<std::uint32_t>(witness)});
         }
         else if (free_head != None)
         {
             index = free_head;
             free_head = records[index].next;
-            records[index] = {data, heads[home],
-                              static_cast<std::uint32_t>(witness)};
+            records[index] = {data, heads[home], static_cast<std::uint32_t>(witness)};
         }
         else
             return;
@@ -521,12 +505,11 @@ public:
     std::size_t bytes() const
     {
         return compact
-            ? heads.size() * sizeof(std::uint32_t)
-                + records.capacity() * sizeof(Record)
-            : wide_entries.size() * sizeof(WideEntry);
+                   ? heads.size() * sizeof(std::uint32_t) + records.capacity() * sizeof(Record)
+                   : wide_entries.size() * sizeof(WideEntry);
     }
 
-private:
+  private:
     static constexpr std::size_t ProbeCount = 16;
     static constexpr std::uint32_t None = 0xffffffffU;
 
@@ -547,9 +530,7 @@ private:
 
     std::size_t bucket(std::uint64_t occupied, int color) const
     {
-        return mix64(occupied
-                     ^ (std::uint64_t(color) * 0x9e3779b97f4a7c15ULL))
-            & bucket_mask;
+        return mix64(occupied ^ (std::uint64_t(color) * 0x9e3779b97f4a7c15ULL)) & bucket_mask;
     }
 
     bool find_wide(const Key& key, int color, Result& result) const
@@ -558,17 +539,16 @@ private:
         const std::size_t home = bucket(occupied, color);
         for (std::size_t offset = 0; offset < ProbeCount; ++offset)
         {
-            const WideEntry& entry =
-                wide_entries[(home + offset) & bucket_mask];
-            if (!entry.valid
-                || (entry.key.black | entry.key.white) != occupied)
+            const WideEntry& entry = wide_entries[(home + offset) & bucket_mask];
+            if (!entry.valid)
+                return false;
+            if ((entry.key.black | entry.key.white) != occupied)
                 continue;
             const std::uint8_t bit = std::uint8_t(1) << color;
             if (!(entry.known & bit))
                 continue;
             const std::uint64_t query_own = color == 0 ? key.black : key.white;
-            const std::uint64_t known_own =
-                color == 0 ? entry.key.black : entry.key.white;
+            const std::uint64_t known_own = color == 0 ? entry.key.black : entry.key.white;
             if ((entry.wins & bit) && (query_own & ~known_own) == 0)
             {
                 result = Result::Win;
@@ -627,14 +607,12 @@ private:
 
 class Board
 {
-public:
-    explicit Board(int size)
-        : n(size), cells(size >= 1 && size <= 8 ? size * size : 0)
+  public:
+    explicit Board(int size) : n(size), cells(size >= 1 && size <= 8 ? size * size : 0)
     {
         if (n < 1 || n > 8)
             throw std::invalid_argument("board size must be in 1..8");
-        board_mask = cells == 64 ? ~std::uint64_t(0)
-                                 : (std::uint64_t(1) << cells) - 1;
+        board_mask = cells == 64 ? ~std::uint64_t(0) : (std::uint64_t(1) << cells) - 1;
         for (int row = 0; row < n; ++row)
             for (int col = 0; col < n; ++col)
             {
@@ -661,8 +639,7 @@ public:
             powers[point] = powers[point - 1] * 3;
         for (int symmetry = 0; symmetry < 4; ++symmetry)
             for (int point = 0; point < cells; ++point)
-                transformed_power[symmetry][point] =
-                    powers[transform[symmetry][point]];
+                transformed_power[symmetry][point] = powers[transform[symmetry][point]];
         for (int value = 0; value < n; ++value)
         {
             north |= bit(index(value, 0));
@@ -673,10 +650,7 @@ public:
     }
 
     int index(int col, int row) const { return row * n + col; }
-    bool inside(int col, int row) const
-    {
-        return col >= 0 && col < n && row >= 0 && row < n;
-    }
+    bool inside(int col, int row) const { return col >= 0 && col < n && row >= 0 && row < n; }
     static std::uint64_t bit(int point) { return std::uint64_t(1) << point; }
 
     bool connected(std::uint64_t stones, int color) const
@@ -697,20 +671,18 @@ public:
 
     std::uint64_t adjacent(std::uint64_t stones) const
     {
-        return (((stones & ~east) << 1)
-                | ((stones & ~west) >> 1)
-                | (stones << n)
-                | (stones >> n)
-                | ((stones & ~(north | east)) >> (n - 1))
-                | ((stones & ~(south | west)) << (n - 1)))
-            & board_mask;
+        return (((stones & ~east) << 1) | ((stones & ~west) >> 1) | (stones << n) |
+                (stones >> n) | ((stones & ~(north | east)) >> (n - 1)) |
+                ((stones & ~(south | west)) << (n - 1))) &
+               board_mask;
     }
 
     std::uint64_t connecting_moves(std::uint64_t stones, int color) const
     {
         const std::uint64_t first = color == 0 ? north : west;
         const std::uint64_t second = color == 0 ? south : east;
-        auto closure = [&](std::uint64_t frontier) {
+        auto closure = [&](std::uint64_t frontier)
+        {
             std::uint64_t seen = frontier;
             while (frontier)
             {
@@ -726,16 +698,14 @@ public:
         return touches_first & touches_second & ~stones;
     }
 
-    std::uint64_t terminal_trap(std::uint64_t own,
-                                std::uint64_t other, int color) const
+    std::uint64_t terminal_trap(std::uint64_t own, std::uint64_t other, int color) const
     {
         // Leave the opponent one empty cell that completes its connection.
         // Taking every other empty cell is safe and leaves no legal reply.
         const std::uint64_t empty = board_mask & ~(own | other);
         if (std::popcount(empty) < 2)
             return 0;
-        std::uint64_t pivots =
-            connecting_moves(other, color ^ 1) & empty;
+        std::uint64_t pivots = connecting_moves(other, color ^ 1) & empty;
         while (pivots)
         {
             const std::uint64_t pivot = pivots & -pivots;
@@ -747,24 +717,23 @@ public:
         return 0;
     }
 
-    std::uint64_t disjoint_pair_reserve(std::uint64_t stones,
-                                        std::uint64_t blocked,
-                                        int color) const
+    std::uint64_t
+    disjoint_pair_reserve(std::uint64_t stones, std::uint64_t blocked, int color) const
     {
         const std::uint64_t empty = board_mask & ~(stones | blocked);
         if (std::popcount(empty) < 4)
             return 0;
         const std::uint64_t pivots = connecting_moves(stones, color) & empty;
-        std::array<std::uint64_t, 36> graph{};
+        std::array<std::uint64_t, 64> graph{};
         std::uint64_t first_work = empty;
         while (first_work)
         {
             const std::uint64_t first = first_work & -first_work;
             first_work &= first_work - 1;
             const int first_point = std::countr_zero(first);
-            std::uint64_t seconds = pivots & first
-                ? empty & ~first
-                : connecting_moves(stones | first, color) & empty & ~first;
+            std::uint64_t seconds =
+                pivots & first ? empty & ~first
+                               : connecting_moves(stones | first, color) & empty & ~first;
             seconds &= ~((first << 1) - 1);
             graph[first_point] |= seconds;
             while (seconds)
@@ -779,8 +748,7 @@ public:
         {
             const std::uint64_t first = first_work & -first_work;
             first_work &= first_work - 1;
-            std::uint64_t seconds =
-                graph[std::countr_zero(first)] & first_work;
+            std::uint64_t seconds = graph[std::countr_zero(first)] & first_work;
             while (seconds)
             {
                 const std::uint64_t second = seconds & -seconds;
@@ -791,8 +759,7 @@ public:
                 {
                     const std::uint64_t third = third_work & -third_work;
                     third_work &= third_work - 1;
-                    const std::uint64_t fourth =
-                        graph[std::countr_zero(third)] & remaining;
+                    const std::uint64_t fourth = graph[std::countr_zero(third)] & remaining;
                     if (fourth)
                         return first | second | third | (fourth & -fourth);
                 }
@@ -801,28 +768,23 @@ public:
         return 0;
     }
 
-    std::uint64_t disjoint_pair_trap(std::uint64_t own,
-                                     std::uint64_t other, int color) const
+    std::uint64_t disjoint_pair_trap(std::uint64_t own, std::uint64_t other, int color) const
     {
         const std::uint64_t empty = board_mask & ~(own | other);
         if (std::popcount(empty) < 5)
             return 0;
-        const std::uint64_t reserve =
-            disjoint_pair_reserve(other, own, color ^ 1);
+        const std::uint64_t reserve = disjoint_pair_reserve(other, own, color ^ 1);
         if (!reserve)
             return 0;
         const std::uint64_t response = empty & ~reserve;
-        return response && !connected(own | response, color)
-            ? response : 0;
+        return response && !connected(own | response, color) ? response : 0;
     }
 
-    std::uint64_t simplicial_cells(std::uint64_t own,
-                                   std::uint64_t other, int color) const
+    std::uint64_t simplicial_cells(std::uint64_t own, std::uint64_t other, int color) const
     {
         if (cells > 36)
             return 0;
-        const std::array<std::uint64_t, 38> graph =
-            connection_graph(own, other, color);
+        const std::array<std::uint64_t, 38> graph = connection_graph(own, other, color);
         const std::uint64_t empty = board_mask & ~(own | other);
         std::uint64_t simplicial = 0;
         std::uint64_t work = empty;
@@ -843,6 +805,87 @@ public:
                 simplicial |= bit(point);
         }
         return simplicial;
+    }
+
+    struct WhiteConnectionGraph
+    {
+        std::array<std::uint64_t, 64> neighbors{};
+        std::array<std::uint8_t, 64> sides{};
+    };
+
+    WhiteConnectionGraph white_connection_graph(std::uint64_t black, std::uint64_t white) const
+    {
+        const std::uint64_t empty = board_mask & ~(black | white);
+        WhiteConnectionGraph graph;
+        for (auto work = empty; work; work &= work - 1)
+        {
+            const int point = std::countr_zero(work);
+            graph.neighbors[point] = neighbors[point] & empty;
+            graph.sides[point] = ((bit(point) & west) ? 1 : 0) | ((bit(point) & east) ? 2 : 0);
+        }
+
+        // Contract each fixed White component into its empty boundary.
+        for (auto remaining = white; remaining;)
+        {
+            std::uint64_t component = 0;
+            std::uint64_t frontier = remaining & -remaining;
+            while (frontier)
+            {
+                component |= frontier;
+                remaining &= ~frontier;
+                frontier = adjacent(frontier) & remaining;
+            }
+            const auto boundary = adjacent(component) & empty;
+            const std::uint8_t attachments =
+                ((component & west) ? 1 : 0) | ((component & east) ? 2 : 0);
+            for (auto work = boundary; work; work &= work - 1)
+            {
+                const int point = std::countr_zero(work);
+                graph.neighbors[point] |= boundary & ~bit(point);
+                graph.sides[point] |= attachments;
+            }
+        }
+        return graph;
+    }
+
+    std::uint64_t
+    dominated_moves(const WhiteConnectionGraph& graph, int point, std::uint64_t choices) const
+    {
+        // A replacement must reroute every path through the skipped vertex.
+        auto candidates = choices & ~bit(point);
+        const auto boundary = graph.neighbors[point];
+        for (auto firsts = boundary; firsts && candidates; firsts &= firsts - 1)
+        {
+            const int first = std::countr_zero(firsts);
+            auto seconds = firsts & ~bit(first) & ~graph.neighbors[first];
+            for (; seconds && candidates; seconds &= seconds - 1)
+            {
+                const int second = std::countr_zero(seconds);
+                candidates &= bit(first) | bit(second) |
+                              (graph.neighbors[first] & graph.neighbors[second]);
+            }
+        }
+        for (int side = 0; side < 2 && candidates; ++side)
+        {
+            if (!(graph.sides[point] & (1 << side)))
+                continue;
+            std::uint64_t attached = 0;
+            for (auto work = choices | boundary; work; work &= work - 1)
+            {
+                const int cell = std::countr_zero(work);
+                if (graph.sides[cell] & (1 << side))
+                    attached |= bit(cell);
+            }
+            auto work = boundary & ~attached;
+            for (; work && candidates; work &= work - 1)
+            {
+                const int cell = std::countr_zero(work);
+                candidates &= bit(cell) | (attached & graph.neighbors[cell]);
+            }
+            if (graph.sides[point] == 3)
+                candidates &= attached;
+        }
+        return candidates;
     }
 
     std::uint64_t transformed(std::uint64_t stones, int symmetry) const
@@ -879,10 +922,8 @@ public:
             work &= work - 1;
             for (int symmetry = 0; symmetry < 4; ++symmetry)
             {
-                const std::uint64_t value =
-                    transformed_power[symmetry][point];
-                result.black_symmetry[symmetry] |=
-                    bit(transform[symmetry][point]);
+                const std::uint64_t value = transformed_power[symmetry][point];
+                result.black_symmetry[symmetry] |= bit(transform[symmetry][point]);
                 result.code[symmetry] += value;
                 result.occupied_code[symmetry] += value;
             }
@@ -894,10 +935,8 @@ public:
             work &= work - 1;
             for (int symmetry = 0; symmetry < 4; ++symmetry)
             {
-                const std::uint64_t value =
-                    transformed_power[symmetry][point];
-                result.white_symmetry[symmetry] |=
-                    bit(transform[symmetry][point]);
+                const std::uint64_t value = transformed_power[symmetry][point];
+                result.white_symmetry[symmetry] |= bit(transform[symmetry][point]);
                 result.code[symmetry] += 2 * value;
                 result.occupied_code[symmetry] += value;
             }
@@ -912,8 +951,7 @@ public:
         {
             const std::uint64_t value = transformed_power[symmetry][point];
             (color == 0 ? position.black_symmetry[symmetry]
-                        : position.white_symmetry[symmetry])
-                |= bit(transform[symmetry][point]);
+                        : position.white_symmetry[symmetry]) |= bit(transform[symmetry][point]);
             position.code[symmetry] += (color == 0 ? value : 2 * value);
             position.occupied_code[symmetry] += value;
         }
@@ -926,8 +964,8 @@ public:
         {
             const std::uint64_t value = transformed_power[symmetry][point];
             (color == 0 ? position.black_symmetry[symmetry]
-                        : position.white_symmetry[symmetry])
-                &= ~bit(transform[symmetry][point]);
+                        : position.white_symmetry[symmetry]) &=
+                ~bit(transform[symmetry][point]);
             position.code[symmetry] -= (color == 0 ? value : 2 * value);
             position.occupied_code[symmetry] -= value;
         }
@@ -941,11 +979,10 @@ public:
         int symmetry;
     };
 
-    Canonical canonical(const Position& position, int color,
-                        bool use_symmetry, bool need_key) const
+    Canonical
+    canonical(const Position& position, int color, bool use_symmetry, bool need_key) const
     {
-        Canonical best{{position.black, position.white}, color,
-                       position.code[0], 0};
+        Canonical best{{position.black, position.white}, color, position.code[0], 0};
         if (!use_symmetry)
             return best;
         if (cells <= 36)
@@ -954,13 +991,11 @@ public:
             for (int symmetry = 1; symmetry < 4; ++symmetry)
             {
                 const bool swaps = symmetry >= 2;
-                const std::uint64_t next_code = swaps
-                    ? 3 * position.occupied_code[symmetry]
-                        - position.code[symmetry]
-                    : position.code[symmetry];
+                const std::uint64_t next_code =
+                    swaps ? 3 * position.occupied_code[symmetry] - position.code[symmetry]
+                          : position.code[symmetry];
                 const int next_color = swaps ? color ^ 1 : color;
-                if (std::tie(next_code, next_color)
-                    < std::tie(best.code, best.color))
+                if (std::tie(next_code, next_color) < std::tie(best.code, best.color))
                 {
                     best.code = next_code;
                     best.color = next_color;
@@ -986,8 +1021,8 @@ public:
                 std::swap(next_black, next_white);
             const int next_color = swaps ? color ^ 1 : color;
             const Key candidate{next_black, next_white};
-            if (std::tie(candidate.black, candidate.white, next_color)
-                < std::tie(best.key.black, best.key.white, best.color))
+            if (std::tie(candidate.black, candidate.white, next_color) <
+                std::tie(best.key.black, best.key.white, best.color))
                 best = {candidate, next_color, 0, symmetry};
         }
         return best;
@@ -995,8 +1030,8 @@ public:
 
     std::string cell_name(int point) const
     {
-        return std::string(1, static_cast<char>('a' + point % n))
-            + std::to_string(point / n + 1);
+        return std::string(1, static_cast<char>('a' + point % n)) +
+               std::to_string(point / n + 1);
     }
 
     int parse_cell(std::string_view name) const
@@ -1029,9 +1064,9 @@ public:
     std::array<std::array<std::uint8_t, 64>, 4> transform{};
     std::array<std::array<std::uint64_t, 64>, 4> transformed_power{};
 
-private:
-    std::array<std::uint64_t, 38> connection_graph(
-        std::uint64_t own, std::uint64_t other, int color) const
+  private:
+    std::array<std::uint64_t, 38>
+    connection_graph(std::uint64_t own, std::uint64_t other, int color) const
     {
         std::array<std::uint64_t, 38> graph{};
         const std::uint64_t empty = board_mask & ~(own | other);
@@ -1147,10 +1182,10 @@ std::vector<std::uint64_t> symmetric_root_candidates(const Board& board)
         if (!board.connected(cells, 0) && !board.connected(cells, 1))
             candidates.push_back(cells);
     }
-    std::stable_sort(candidates.begin(), candidates.end(),
-                     [](std::uint64_t left, std::uint64_t right) {
-                         return std::popcount(left) > std::popcount(right);
-                     });
+    std::stable_sort(candidates.begin(),
+                     candidates.end(),
+                     [](std::uint64_t left, std::uint64_t right)
+                     { return std::popcount(left) > std::popcount(right); });
     return candidates;
 }
 
@@ -1159,8 +1194,7 @@ std::size_t winning_set_megabytes(int cells, std::size_t total, bool enabled)
     const std::size_t monotone_share = total / 2;
     if (!enabled || cells > 30 || monotone_share <= 1)
         return 0;
-    return std::min(monotone_share - 1,
-                    std::max<std::size_t>(total / 32, 1));
+    return std::min(monotone_share - 1, std::max<std::size_t>(total / 32, 1));
 }
 
 struct SolverConfig
@@ -1174,26 +1208,22 @@ struct SolverConfig
 
 class Solver
 {
-public:
-    explicit Solver(const SolverConfig& config, double seconds = 0,
+  public:
+    explicit Solver(const SolverConfig& config,
+                    double seconds = 0,
                     std::uint64_t board_limit = 0)
-        : board(config.size),
-          tt(config.size * config.size, config.tt_megabytes / 2),
+        : board(config.size), tt(config.size * config.size, config.tt_megabytes / 2),
           monotone(config.size * config.size,
-                   std::max<std::size_t>(
-                       config.tt_megabytes / 2
-                           - winning_set_megabytes(
-                               config.size * config.size,
-                               config.tt_megabytes, config.cross_turn),
-                       1)),
+                   std::max<std::size_t>(config.tt_megabytes / 2 -
+                                             winning_set_megabytes(config.size * config.size,
+                                                                   config.tt_megabytes,
+                                                                   config.cross_turn),
+                                         1)),
           witnesses(config.size * config.size,
                     winning_set_megabytes(
-                        config.size * config.size, config.tt_megabytes,
-                        config.cross_turn)),
-          use_symmetry(config.symmetry
-                       && config.size * config.size <= 30),
-          use_cross_turn(config.cross_turn
-                         && config.size * config.size <= 30),
+                        config.size * config.size, config.tt_megabytes, config.cross_turn)),
+          use_symmetry(config.symmetry && config.size * config.size <= 36),
+          use_cross_turn(config.cross_turn && config.size * config.size <= 30),
           alternate_branch_order(config.alternate_order)
     {
         build_order();
@@ -1206,15 +1236,13 @@ public:
         reset_query(seconds, board_limit);
     }
 
-    void begin_attempt(double seconds, std::uint64_t board_limit,
-                       int attempt)
+    void begin_attempt(double seconds, std::uint64_t board_limit, int attempt)
     {
-        end_first_search = (board.n <= 5)
-            ^ (alternate_branch_order && (attempt & 1));
+        end_first_search = (board.n <= 5) ^ (alternate_branch_order && (attempt & 1));
         reset_query(seconds, board_limit);
     }
 
-private:
+  private:
     void reset_query(double seconds, std::uint64_t board_limit)
     {
         stats = {};
@@ -1224,15 +1252,15 @@ private:
         if (seconds > 0)
         {
             const auto now = std::chrono::steady_clock::now();
-            const auto span =
-                std::chrono::duration_cast<std::chrono::steady_clock::duration>(
-                    std::chrono::duration<double>(seconds));
+            const auto span = std::chrono::duration_cast<std::chrono::steady_clock::duration>(
+                std::chrono::duration<double>(seconds));
             deadline = span > std::chrono::steady_clock::time_point::max() - now
-                ? std::chrono::steady_clock::time_point::max() : now + span;
+                           ? std::chrono::steady_clock::time_point::max()
+                           : now + span;
         }
     }
 
-public:
+  public:
     Outcome solve_board(std::uint64_t black, std::uint64_t white)
     {
         if (!(black | white))
@@ -1260,12 +1288,9 @@ public:
     const Board board;
     SearchStats stats;
 
-    std::size_t tt_bytes() const
-    {
-        return tt.bytes() + monotone.bytes() + witnesses.bytes();
-    }
+    std::size_t tt_bytes() const { return tt.bytes() + monotone.bytes() + witnesses.bytes(); }
 
-private:
+  private:
     struct MoveList
     {
         const int* begin() const { return points.data(); }
@@ -1285,8 +1310,7 @@ private:
     Result solve_symmetric_empty()
     {
         const Board::Position empty = board.position(0, 0);
-        const Board::Canonical root = board.canonical(
-            empty, 0, use_symmetry, true);
+        const Board::Canonical root = board.canonical(empty, 0, use_symmetry, true);
         Result cached;
         if (tt.find(root.key, root.code, root.color, cached))
         {
@@ -1296,8 +1320,7 @@ private:
 
         // In an N-position Theorem 3.1 gives one common winning set. Empty-
         // board symmetries make that unique set a union of complete orbits.
-        const std::vector<std::uint64_t> candidates =
-            symmetric_root_candidates(board);
+        const std::vector<std::uint64_t> candidates = symmetric_root_candidates(board);
 
         bool unknown = false;
         for (std::uint64_t cells : candidates)
@@ -1328,7 +1351,8 @@ private:
         return search_inplace(position, color, true, nullptr);
     }
 
-    Result search_inplace(Board::Position& position, int color,
+    Result search_inplace(Board::Position& position,
+                          int color,
                           bool allow_cross_turn,
                           std::uint64_t* winning_cells)
     {
@@ -1337,14 +1361,17 @@ private:
         if (aborted)
             return Result::Unknown;
 
-        const Board::Canonical canonical =
-            board.canonical(position, color, use_symmetry, true);
+        const Board::Canonical canonical = board.canonical(position, color, use_symmetry, true);
         Result cached;
         bool opposite_witness = false;
-        const bool found = use_cross_turn
-            ? tt.find(canonical.key, canonical.code, canonical.color, cached,
-                      nullptr, &opposite_witness)
-            : tt.find(canonical.key, canonical.code, canonical.color, cached);
+        const bool found =
+            use_cross_turn ? tt.find(canonical.key,
+                                     canonical.code,
+                                     canonical.color,
+                                     cached,
+                                     nullptr,
+                                     &opposite_witness)
+                           : tt.find(canonical.key, canonical.code, canonical.color, cached);
         if (found)
         {
             ++stats.tt_hits;
@@ -1357,13 +1384,11 @@ private:
             return cached;
         }
 
-        if (allow_cross_turn && use_cross_turn
-            && opposite_witness)
+        if (allow_cross_turn && use_cross_turn && opposite_witness)
         {
             Result inferred;
             std::uint64_t inferred_cells = 0;
-            if (infer_from_opponent(position, color,
-                                    inferred, inferred_cells))
+            if (infer_from_opponent(position, color, inferred, inferred_cells))
             {
                 ++stats.cross_turn_cutoffs;
                 if (winning_cells)
@@ -1388,12 +1413,9 @@ private:
         // only safe prefixes, so for player p and a first cell x:
         // W_p(B) = W_p(B + p{x}) or not W_(1-p)(B + p{x}).
         // This folds all nonempty subsets into two recursive edges per cell.
-        const std::uint64_t own =
-            color == 0 ? position.black : position.white;
-        const std::uint64_t other =
-            color == 0 ? position.white : position.black;
-        const std::uint64_t trap =
-            board.terminal_trap(own, other, color);
+        const std::uint64_t own = color == 0 ? position.black : position.white;
+        const std::uint64_t other = color == 0 ? position.white : position.black;
+        const std::uint64_t trap = board.terminal_trap(own, other, color);
         if (trap)
         {
             ++stats.terminal_traps;
@@ -1402,8 +1424,7 @@ private:
             store(canonical, Result::Win, trap);
             return Result::Win;
         }
-        const std::uint64_t pair_trap =
-            board.disjoint_pair_trap(own, other, color);
+        const std::uint64_t pair_trap = board.disjoint_pair_trap(own, other, color);
         if (pair_trap)
         {
             ++stats.disjoint_pair_traps;
@@ -1413,14 +1434,14 @@ private:
             return Result::Win;
         }
         std::uint64_t dead = 0;
-        const int empties = board.cells
-            - std::popcount(position.black | position.white);
+        const int empties = board.cells - std::popcount(position.black | position.white);
         if (board.cells <= 36 && empties <= 12)
         {
             ++stats.dead_calls;
-            dead = board.simplicial_cells(
-                position.black, position.white, 0)
-                & board.simplicial_cells(position.white, position.black, 1);
+            // Hex complement duality makes a cell irrelevant to both colors
+            // whenever either color's connectivity certificate omits it.
+            dead = board.simplicial_cells(position.black, position.white, 0) |
+                   board.simplicial_cells(position.white, position.black, 1);
         }
         if (dead)
         {
@@ -1435,12 +1456,11 @@ private:
             }
 
             std::uint64_t continuation_cells = 0;
-            const Result continuation = search_inplace(
-                position, color, allow_cross_turn, &continuation_cells);
+            const Result continuation =
+                search_inplace(position, color, allow_cross_turn, &continuation_cells);
             Result end = Result::Unknown;
             if (!aborted && continuation != Result::Win)
-                end = search_inplace(position, color ^ 1,
-                                     allow_cross_turn, nullptr);
+                end = search_inplace(position, color ^ 1, allow_cross_turn, nullptr);
 
             work = dead;
             while (work)
@@ -1453,9 +1473,10 @@ private:
                 return Result::Unknown;
             if (continuation == Result::Win || end == Result::Loss)
             {
-                const std::uint64_t cells = continuation == Result::Win
-                    ? (continuation_cells ? dead | continuation_cells : 0)
-                    : dead;
+                const std::uint64_t cells =
+                    continuation == Result::Win
+                        ? (continuation_cells ? dead | continuation_cells : 0)
+                        : dead;
                 if (winning_cells)
                     *winning_cells = cells;
                 store(canonical, Result::Win, cells);
@@ -1467,35 +1488,45 @@ private:
             return Result::Loss;
         }
 
-        const std::uint64_t connecting = board.connecting_moves(
-            color == 0 ? position.black : position.white, color);
-        const MoveList moves =
-            ordered_moves(position.black, position.white, color);
+        const std::uint64_t connecting =
+            board.connecting_moves(color == 0 ? position.black : position.white, color);
+        const MoveList moves = ordered_moves(position.black, position.white, color);
+        const Board::WhiteConnectionGraph dominance_graph =
+            board.white_connection_graph(position.black, position.white);
+        std::uint64_t choices = board.board_mask & ~(own | other);
         bool unknown = false;
         for (int move : moves)
         {
+            if (!(choices & Board::bit(move)))
+                continue;
             ++stats.cell_trials;
             if (connecting & Board::bit(move))
             {
                 ++stats.self_connections;
                 continue;
             }
+            // Retain this legal choice and skip every weaker replacement.
+            // The path relation makes it no worse for either player's turn.
+            choices &= ~board.dominated_moves(dominance_graph, move, choices);
             board.place(position, move, color);
-            auto evaluate = [&](bool end_first) {
+            auto evaluate = [&](bool end_first)
+            {
                 bool branch_unknown = false;
-                auto try_end = [&]() -> PlacedResult {
-                    const Result end = search_inplace(
-                        position, color ^ 1, allow_cross_turn, nullptr);
+                auto try_end = [&]() -> PlacedResult
+                {
+                    const Result end =
+                        search_inplace(position, color ^ 1, allow_cross_turn, nullptr);
                     if (end == Result::Loss)
                         return {Result::Win, 0, true};
                     if (end == Result::Unknown)
                         branch_unknown = true;
                     return {Result::Loss, 0, false};
                 };
-                auto try_continue = [&]() -> PlacedResult {
+                auto try_continue = [&]() -> PlacedResult
+                {
                     std::uint64_t cells = 0;
-                    const Result continuation = search_inplace(
-                        position, color, allow_cross_turn, &cells);
+                    const Result continuation =
+                        search_inplace(position, color, allow_cross_turn, &cells);
                     if (continuation == Result::Win)
                         return {Result::Win, cells, false};
                     if (continuation == Result::Unknown)
@@ -1508,9 +1539,7 @@ private:
                 PlacedResult second = end_first ? try_continue() : try_end();
                 if (second.result == Result::Win || aborted)
                     return second;
-                return PlacedResult{branch_unknown ? Result::Unknown
-                                                   : Result::Loss,
-                                    0, false};
+                return PlacedResult{branch_unknown ? Result::Unknown : Result::Loss, 0, false};
             };
             const PlacedResult placed = evaluate(end_first_search);
             board.unplace(position, move, color);
@@ -1518,10 +1547,10 @@ private:
                 return Result::Unknown;
             if (placed.result == Result::Win)
             {
-                const std::uint64_t cells = placed.ended
-                    ? Board::bit(move)
-                    : placed.continuation_cells
-                        ? placed.continuation_cells | Board::bit(move) : 0;
+                const std::uint64_t cells = placed.ended ? Board::bit(move)
+                                            : placed.continuation_cells
+                                                ? placed.continuation_cells | Board::bit(move)
+                                                : 0;
                 if (winning_cells)
                     *winning_cells = cells;
                 store(canonical, Result::Win, cells);
@@ -1536,8 +1565,10 @@ private:
         return Result::Loss;
     }
 
-    bool infer_from_opponent(Board::Position& position, int color,
-                             Result& inferred, std::uint64_t& winning_cells)
+    bool infer_from_opponent(Board::Position& position,
+                             int color,
+                             Result& inferred,
+                             std::uint64_t& winning_cells)
     {
         ++stats.cross_turn_queries;
         const int opponent = color ^ 1;
@@ -1568,8 +1599,7 @@ private:
             work &= work - 1;
             board.place(position, point, color);
         }
-        const Result child =
-            search_inplace(position, opponent, false, nullptr);
+        const Result child = search_inplace(position, opponent, false, nullptr);
         work = set_cells;
         while (work)
         {
@@ -1584,52 +1614,43 @@ private:
         return true;
     }
 
-    bool find_witness(const Board::Position& position, int color,
-                      std::uint64_t& cells) const
+    bool find_witness(const Board::Position& position, int color, std::uint64_t& cells) const
     {
-        const Board::Canonical canonical =
-            board.canonical(position, color, use_symmetry, true);
+        const Board::Canonical canonical = board.canonical(position, color, use_symmetry, true);
         if (find_exact_witness(canonical, cells))
             return true;
         std::uint64_t transformed_cells = 0;
-        if (!monotone.find_witness(canonical.key, canonical.color,
-                                   transformed_cells))
+        if (!monotone.find_witness(canonical.key, canonical.color, transformed_cells))
             return false;
         cells = board.transformed(transformed_cells, canonical.symmetry);
         return true;
     }
 
-    bool find_exact_witness(const Board::Canonical& canonical,
-                            std::uint64_t& cells) const
+    bool find_exact_witness(const Board::Canonical& canonical, std::uint64_t& cells) const
     {
         std::uint64_t transformed_cells = 0;
-        if (!witnesses.find(canonical.code, canonical.color,
-                            transformed_cells))
+        if (!witnesses.find(canonical.code, canonical.color, transformed_cells))
             return false;
         cells = board.transformed(transformed_cells, canonical.symmetry);
         return true;
     }
 
-    void store(const Board::Canonical& canonical, Result result,
-               std::uint64_t winning_cells)
+    void store(const Board::Canonical& canonical, Result result, std::uint64_t winning_cells)
     {
-        const std::uint64_t transformed_cells = winning_cells
-            ? board.transformed(winning_cells, canonical.symmetry) : 0;
+        const std::uint64_t transformed_cells =
+            winning_cells ? board.transformed(winning_cells, canonical.symmetry) : 0;
 
-        tt.store(canonical.key, canonical.code, canonical.color, result,
-                 winning_cells != 0);
-        witnesses.store(canonical.code, canonical.color,
-                        transformed_cells);
-        monotone.store(canonical.key, canonical.color, result,
-                       transformed_cells);
+        tt.store(canonical.key, canonical.code, canonical.color, result, winning_cells != 0);
+        witnesses.store(canonical.code, canonical.color, transformed_cells);
+        monotone.store(canonical.key, canonical.color, result, transformed_cells);
     }
 
     bool time_expired()
     {
         if (aborted)
             return true;
-        if (deadline != std::chrono::steady_clock::time_point{}
-            && std::chrono::steady_clock::now() >= deadline)
+        if (deadline != std::chrono::steady_clock::time_point{} &&
+            std::chrono::steady_clock::now() >= deadline)
             aborted = true;
         return aborted;
     }
@@ -1639,19 +1660,22 @@ private:
         base_order.resize(board.cells);
         for (int point = 0; point < board.cells; ++point)
             base_order[point] = point;
-        std::stable_sort(base_order.begin(), base_order.end(), [&](int a, int b) {
-            auto center_distance = [&](int point) {
-                const int col = point % board.n;
-                const int row = point / board.n;
-                return std::abs(2 * col - board.n + 1)
-                    + std::abs(2 * row - board.n + 1);
-            };
-            return center_distance(a) < center_distance(b);
-        });
+        std::stable_sort(base_order.begin(),
+                         base_order.end(),
+                         [&](int a, int b)
+                         {
+                             auto center_distance = [&](int point)
+                             {
+                                 const int col = point % board.n;
+                                 const int row = point / board.n;
+                                 return std::abs(2 * col - board.n + 1) +
+                                        std::abs(2 * row - board.n + 1);
+                             };
+                             return center_distance(a) < center_distance(b);
+                         });
     }
 
-    MoveList ordered_moves(std::uint64_t black, std::uint64_t white,
-                           int color) const
+    MoveList ordered_moves(std::uint64_t black, std::uint64_t white, int color) const
     {
         const std::uint64_t occupied = black | white;
         const std::uint64_t own = color == 0 ? black : white;
@@ -1659,12 +1683,12 @@ private:
         MoveList moves;
         std::array<int, 64> scores{};
         constexpr std::array<std::int8_t, 35> weights = {
-            0, 15, -112, 127, 2, -1, 1, 1, -3, -2, -3, -3,
-            -4, 4, 2, 4, -3, -1, -1, -2, 0, 1, -3, -8, 8,
-            -3, -7, 5, -3, -4, 5, 7, -6, 5, 10};
+            0,  15, -112, 127, 2,  -1, 1, 1,  -3, -2, -3, -3, -4, 4, 2,  4, -3, -1,
+            -1, -2, 0,    1,   -3, -8, 8, -3, -7, 5,  -3, -4, 5,  7, -6, 5, 10};
         constexpr std::array<int, 6> dx = {1, -1, 0, 0, 1, -1};
         constexpr std::array<int, 6> dy = {0, 0, 1, -1, -1, 1};
-        auto insert = [&](int point, int score) {
+        auto insert = [&](int point, int score)
+        {
             int index = moves.count;
             while (index > 0 && score > scores[index - 1])
             {
@@ -1681,8 +1705,7 @@ private:
             if (occupied & Board::bit(point))
                 continue;
             const int own_neighbors = std::popcount(board.neighbors[point] & own);
-            const int opponent_neighbors =
-                std::popcount(board.neighbors[point] & opponent);
+            const int opponent_neighbors = std::popcount(board.neighbors[point] & opponent);
             int score = -4 * opponent_neighbors - own_neighbors;
             if (board.n != 5)
             {
@@ -1693,25 +1716,18 @@ private:
             const int physical_y = point / board.n;
             const int x = color == 0 ? physical_x : physical_y;
             const int y = color == 0 ? physical_y : physical_x;
-            score = weights[4] * 18 * (x - 2)
-                + weights[5] * 18 * (y - 2)
-                + weights[6] * 18 * std::abs(x - 2)
-                + weights[7] * 18 * std::abs(y - 2)
-                + weights[8] * 36 * (x == 0)
-                + weights[9] * 36 * (x == 4)
-                + weights[10] * 36 * (y == 0)
-                + weights[11] * 36 * (y == 4)
-                + weights[12] * 6 * own_neighbors
-                + weights[13] * 6 * opponent_neighbors
-                + weights[14] * own_neighbors * own_neighbors
-                + weights[15] * opponent_neighbors * opponent_neighbors
-                + weights[16] * own_neighbors * opponent_neighbors;
+            score = weights[4] * 18 * (x - 2) + weights[5] * 18 * (y - 2) +
+                    weights[6] * 18 * std::abs(x - 2) + weights[7] * 18 * std::abs(y - 2) +
+                    weights[8] * 36 * (x == 0) + weights[9] * 36 * (x == 4) +
+                    weights[10] * 36 * (y == 0) + weights[11] * 36 * (y == 4) +
+                    weights[12] * 6 * own_neighbors + weights[13] * 6 * opponent_neighbors +
+                    weights[14] * own_neighbors * own_neighbors +
+                    weights[15] * opponent_neighbors * opponent_neighbors +
+                    weights[16] * own_neighbors * opponent_neighbors;
             for (int direction = 0; direction < 6; ++direction)
             {
-                const int physical_dx = color == 0
-                    ? dx[direction] : dy[direction];
-                const int physical_dy = color == 0
-                    ? dy[direction] : dx[direction];
+                const int physical_dx = color == 0 ? dx[direction] : dy[direction];
+                const int physical_dy = color == 0 ? dy[direction] : dx[direction];
                 const int xx = physical_x + physical_dx;
                 const int yy = physical_y + physical_dy;
                 const int offset = 17 + 3 * direction;
@@ -1719,8 +1735,7 @@ private:
                     score += weights[offset + 2] * 36;
                 else
                 {
-                    const std::uint64_t cell =
-                        Board::bit(board.index(xx, yy));
+                    const std::uint64_t cell = Board::bit(board.index(xx, yy));
                     if (cell & own)
                         score += weights[offset] * 36;
                     else if (cell & opponent)
@@ -1747,10 +1762,10 @@ private:
 
 std::uint64_t parse_u64(const std::string& value, const char* option)
 {
-    if (value.empty()
-        || std::any_of(value.begin(), value.end(), [](unsigned char character) {
-               return character < '0' || character > '9';
-           }))
+    if (value.empty() ||
+        std::any_of(value.begin(),
+                    value.end(),
+                    [](unsigned char character) { return character < '0' || character > '9'; }))
         throw std::invalid_argument(std::string("invalid ") + option);
     std::size_t used = 0;
     unsigned long long parsed = 0;
@@ -1776,26 +1791,6 @@ std::size_t parse_megabytes(const std::string& value)
     return static_cast<std::size_t>(parsed);
 }
 
-double parse_seconds(const std::string& value)
-{
-    std::size_t used = 0;
-    double parsed = 0;
-    try
-    {
-        parsed = std::stod(value, &used);
-    }
-    catch (const std::exception&)
-    {
-        throw std::invalid_argument("invalid --time");
-    }
-    const double maximum = std::chrono::duration<double>(
-        std::chrono::steady_clock::duration::max()).count();
-    if (used != value.size() || !std::isfinite(parsed)
-        || parsed < 0 || parsed > maximum)
-        throw std::invalid_argument("invalid --time");
-    return parsed;
-}
-
 std::uint64_t parse_cells(const Board& board, const std::string& text)
 {
     if (text.empty() || text == "-")
@@ -1805,9 +1800,8 @@ std::uint64_t parse_cells(const Board& board, const std::string& text)
     while (start < text.size())
     {
         const std::size_t end = text.find(',', start);
-        const std::string_view cell(
-            text.data() + start,
-            (end == std::string::npos ? text.size() : end) - start);
+        const std::string_view cell(text.data() + start,
+                                    (end == std::string::npos ? text.size() : end) - start);
         const int point = board.parse_cell(cell);
         const std::uint64_t mask = Board::bit(point);
         if (stones & mask)
@@ -1829,9 +1823,8 @@ int main(int argc, char** argv)
     try
     {
         if (argc < 2)
-            throw std::invalid_argument(
-                "usage: rexplus_solver N --black CELLS --white CELLS "
-                "--to-play black|white");
+            throw std::invalid_argument("usage: rexplus_solver N --black CELLS --white CELLS "
+                                        "--to-play black|white");
         const int size = std::stoi(argv[1]);
         std::string black_text = "-", white_text = "-";
         int turn = 0, attempts = 1;
@@ -1862,7 +1855,7 @@ int main(int argc, char** argv)
             else if (option == "--tt-mb")
                 memory = parse_megabytes(value);
             else if (option == "--time")
-                seconds = parse_seconds(value);
+                seconds = search_limits::seconds(value);
             else if (option == "--attempts")
                 attempts = std::stoi(value);
             else
@@ -1884,8 +1877,10 @@ int main(int argc, char** argv)
         }
         const auto black = parse_cells(board, black_text);
         const auto white = parse_cells(board, white_text);
-        Solver solver({.size = size, .tt_megabytes = memory,
-                       .cross_turn = true, .alternate_order = true});
+        Solver solver({.size = size,
+                       .tt_megabytes = memory,
+                       .cross_turn = true,
+                       .alternate_order = true});
         Result result = Result::Unknown;
         for (int i = 0; i < attempts && result == Result::Unknown; ++i)
         {
